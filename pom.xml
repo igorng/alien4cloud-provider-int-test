@@ -4,7 +4,7 @@
 
     <groupId>alien4cloud</groupId>
     <artifactId>alien4cloud-provider-int-test</artifactId>
-    <version>1.0.0-SM26-SNAPSHOT</version>
+    <version>1.0.0-SM27-SNAPSHOT</version>
 
     <name>Provider end to end integration tests</name>
 
