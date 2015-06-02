@@ -1,0 +1,173 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>alien4cloud</groupId>
+    <artifactId>alien4cloud-provider-int-test</artifactId>
+    <version>1.0.0-SM26-SNAPSHOT</version>
+
+    <name>Provider end to end integration tests</name>
+
+    <repositories>
+        <repository>
+            <id>repo.opensource.fastconnect.org</id>
+            <url>https://fastconnect.org/maven/content/repositories/opensource</url>
+        </repository>
+        <repository>
+            <id>org.openspaces</id>
+            <name>OpenSpaces</name>
+            <url>http://maven-repository.openspaces.org</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>repo.opensource.fastconnect.org</id>
+            <url>https://fastconnect.org/maven/content/repositories/opensource</url>
+        </repository>
+        <snapshotRepository>
+            <id>repo.opensource.snapshot.fastconnect.org</id>
+            <url>https://fastconnect.org/maven/content/repositories/opensource-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <properties>
+        <java.version>1.7</java.version>
+        <alien4cloud.version>${project.version}</alien4cloud.version>
+        <maven.cargo.version>1.4.7</maven.cargo.version>
+        <jetty.version>9.2.2.v20140723</jetty.version>
+        <maven.compiler.version>2.3.2</maven.compiler.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>alien4cloud</groupId>
+            <artifactId>alien4cloud-rest-it</artifactId>
+            <version>${alien4cloud.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>alien4cloud</groupId>
+            <artifactId>alien4cloud-rest-it</artifactId>
+            <version>${alien4cloud.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-picocontainer</artifactId>
+            <version>1.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>1.2.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>clean-test-data</id>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <tasks>
+                                <delete includeemptydirs="true" failonerror="false">
+                                    <fileset dir="${user.home}/.alien" includes="**/*"/>
+                                </delete>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>${maven.cargo.version}</version>
+                <executions>
+                    <execution>
+                        <id>start-jetty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-jetty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <container>
+                        <containerId>jetty9x</containerId>
+                        <artifactInstaller>
+                            <groupId>org.eclipse.jetty</groupId>
+                            <artifactId>jetty-distribution</artifactId>
+                            <version>${jetty.version}</version>
+                        </artifactInstaller>
+                        <log>${basedir}/target/cargo.log</log>
+                        <output>${basedir}/target/jetty.log</output>
+                    </container>
+
+                    <configuration>
+                        <properties>
+                            <cargo.servlet.port>8088</cargo.servlet.port>
+                            <cargo.logging>high</cargo.logging>
+                            <cargo.jvmargs>-Denv=ittest -Dspring.profiles.active=security-demo -Xdebug</cargo.jvmargs>
+                        </properties>
+                    </configuration>
+
+                    <deployables>
+                        <deployable>
+                            <groupId>alien4cloud</groupId>
+                            <artifactId>alien4cloud-rest-it</artifactId>
+                            <type>war</type>
+                            <pingURL>http://localhost:8088/rest/auth/status</pingURL>
+                            <pingTimeout>60000</pingTimeout>
+                            <!-- 5 min, time to deploy -->
+                            <properties>
+                                <context>/</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.16</version>
+                <configuration>
+                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
