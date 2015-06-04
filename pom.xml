@@ -42,6 +42,11 @@
     <dependencies>
         <dependency>
             <groupId>alien4cloud</groupId>
+            <artifactId>alien4cloud-rest-api</artifactId>
+            <version>${alien4cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>alien4cloud</groupId>
             <artifactId>alien4cloud-rest-it</artifactId>
             <version>${alien4cloud.version}</version>
             <type>war</type>
