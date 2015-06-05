@@ -70,7 +70,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -82,97 +81,111 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>clean-test-data</id>
-                        <phase>pre-integration-test</phase>
-                        <configuration>
-                            <tasks>
-                                <delete includeemptydirs="true" failonerror="false">
-                                    <fileset dir="${user.home}/.alien" includes="**/*"/>
-                                </delete>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>${maven.cargo.version}</version>
-                <executions>
-                    <execution>
-                        <id>start-jetty</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>stop-jetty</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <container>
-                        <containerId>jetty9x</containerId>
-                        <artifactInstaller>
-                            <groupId>org.eclipse.jetty</groupId>
-                            <artifactId>jetty-distribution</artifactId>
-                            <version>${jetty.version}</version>
-                        </artifactInstaller>
-                        <log>${basedir}/target/cargo.log</log>
-                        <output>${basedir}/target/jetty.log</output>
-                    </container>
-
-                    <configuration>
-                        <properties>
-                            <cargo.servlet.port>8088</cargo.servlet.port>
-                            <cargo.logging>high</cargo.logging>
-                            <cargo.jvmargs>-Denv=ittest -Dspring.profiles.active=security-demo -Xdebug</cargo.jvmargs>
-                        </properties>
-                    </configuration>
-
-                    <deployables>
-                        <deployable>
-                            <groupId>alien4cloud</groupId>
-                            <artifactId>alien4cloud-rest-it</artifactId>
-                            <type>war</type>
-                            <pingURL>http://localhost:8088/rest/auth/status</pingURL>
-                            <pingTimeout>60000</pingTimeout>
-                            <!-- 5 min, time to deploy -->
-                            <properties>
-                                <context>/</context>
-                            </properties>
-                        </deployable>
-                    </deployables>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.16</version>
-                <configuration>
-                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>do-test</id>
+            <activation>
+                <property>
+                    <name>doTest</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>clean-test-data</id>
+                                <phase>pre-integration-test</phase>
+                                <configuration>
+                                    <tasks>
+                                        <delete includeemptydirs="true" failonerror="false">
+                                            <fileset dir="${user.home}/.alien" includes="**/*"/>
+                                        </delete>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>${maven.cargo.version}</version>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <container>
+                                <containerId>jetty9x</containerId>
+                                <artifactInstaller>
+                                    <groupId>org.eclipse.jetty</groupId>
+                                    <artifactId>jetty-distribution</artifactId>
+                                    <version>${jetty.version}</version>
+                                </artifactInstaller>
+                                <log>${basedir}/target/cargo.log</log>
+                                <output>${basedir}/target/jetty.log</output>
+                            </container>
+
+                            <configuration>
+                                <properties>
+                                    <cargo.servlet.port>8088</cargo.servlet.port>
+                                    <cargo.logging>high</cargo.logging>
+                                    <cargo.jvmargs>-Denv=ittest -Dspring.profiles.active=security-demo -Xdebug</cargo.jvmargs>
+                                </properties>
+                            </configuration>
+
+                            <deployables>
+                                <deployable>
+                                    <groupId>alien4cloud</groupId>
+                                    <artifactId>alien4cloud-rest-it</artifactId>
+                                    <type>war</type>
+                                    <pingURL>http://localhost:8088/rest/auth/status</pingURL>
+                                    <pingTimeout>60000</pingTimeout>
+                                    <!-- 5 min, time to deploy -->
+                                    <properties>
+                                        <context>/</context>
+                                    </properties>
+                                </deployable>
+                            </deployables>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.16</version>
+                        <configuration>
+                            <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
