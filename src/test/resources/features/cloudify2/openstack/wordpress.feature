@@ -58,3 +58,4 @@ Feature: This is not a test, it reuses integration test step to set up Alien wit
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 10 minutes
+    And The URL which is defined in attribute "wordpress_url" of the node "wordpress" should work

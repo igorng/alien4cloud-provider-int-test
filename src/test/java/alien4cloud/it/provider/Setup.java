@@ -9,6 +9,7 @@ import org.junit.Assert;
 
 import alien4cloud.git.RepositoryManager;
 import alien4cloud.it.Context;
+import alien4cloud.it.application.ApplicationsDeploymentStepDefinitions;
 import alien4cloud.it.common.CommonStepDefinitions;
 import alien4cloud.rest.utils.RestClient;
 import alien4cloud.utils.FileUtil;
@@ -31,6 +32,7 @@ public class Setup {
 
     @Before
     public void beforeScenario() throws Throwable {
+        new ApplicationsDeploymentStepDefinitions().I_undeploy_all_applications();
         COMMON_STEP_DEFINITIONS.beforeScenario();
     }
 
