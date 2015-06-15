@@ -37,14 +37,10 @@
         <maven.cargo.version>1.4.7</maven.cargo.version>
         <jetty.version>9.2.2.v20140723</jetty.version>
         <maven.compiler.version>2.3.2</maven.compiler.version>
+        <lombok.version>1.14.4</lombok.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>alien4cloud</groupId>
-            <artifactId>alien4cloud-rest-api</artifactId>
-            <version>${alien4cloud.version}</version>
-        </dependency>
         <dependency>
             <groupId>alien4cloud</groupId>
             <artifactId>alien4cloud-rest-it</artifactId>
@@ -68,6 +64,12 @@
             <artifactId>cucumber-junit</artifactId>
             <version>1.2.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>

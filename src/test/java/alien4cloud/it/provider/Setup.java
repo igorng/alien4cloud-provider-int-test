@@ -9,10 +9,13 @@ import org.junit.Assert;
 
 import alien4cloud.git.RepositoryManager;
 import alien4cloud.it.Context;
+import alien4cloud.it.application.ApplicationStepDefinitions;
 import alien4cloud.it.application.ApplicationsDeploymentStepDefinitions;
+import alien4cloud.it.cloud.CloudDefinitionsSteps;
 import alien4cloud.it.common.CommonStepDefinitions;
 import alien4cloud.rest.utils.RestClient;
 import alien4cloud.utils.FileUtil;
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 
@@ -30,10 +33,22 @@ public class Setup {
 
     private static final CommonStepDefinitions COMMON_STEP_DEFINITIONS = new CommonStepDefinitions();
 
+    private void cleanUp() throws Throwable {
+        if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
+            new ApplicationsDeploymentStepDefinitions().I_undeploy_it();
+        }
+        new CloudDefinitionsSteps().I_disable_all_clouds();
+        COMMON_STEP_DEFINITIONS.beforeScenario();
+    }
+
     @Before
     public void beforeScenario() throws Throwable {
-        new ApplicationsDeploymentStepDefinitions().I_undeploy_all_applications();
-        COMMON_STEP_DEFINITIONS.beforeScenario();
+        cleanUp();
+    }
+
+    @After
+    public void afterScenario() throws Throwable {
+        cleanUp();
     }
 
     @And("^I checkout the git archive from url \"([^\"]*)\" branch \"([^\"]*)\"$")
