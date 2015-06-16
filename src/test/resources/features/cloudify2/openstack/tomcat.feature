@@ -36,4 +36,10 @@ Feature: Deploy samples with cloudify 2
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 10 minutes
-    And The URL which is defined in attribute "application_url" of the node "War" should work and the html should contain "Fastconnect"
+    And The URL which is defined in attribute "application_url" of the node "War" should work and the html should contain "Welcome to Fastconnect !"
+
+    # Custom command
+    When I trigger on the node template "War" the custom command "update_war_file" of the interface "custom" for application "tomcat-cfy2" with parameters:
+      | WAR_URL | https://github.com/alien4cloud/alien4cloud-cloudify3-provider/raw/develop/src/test/resources/data/war-examples/helloWorld.war |
+    Then The operation response should contain the result "Sucessfully installed war on Tomcat" for instance "1"
+    And The URL which is defined in attribute "application_url" of the node "War" should work and the html should contain "Welcome to testDeployArtifactOverriddenTest !"

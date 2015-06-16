@@ -36,6 +36,7 @@ public class Setup {
     private void cleanUp() throws Throwable {
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
             new ApplicationsDeploymentStepDefinitions().I_undeploy_it();
+            ApplicationStepDefinitions.CURRENT_APPLICATION = null;
         }
         new CloudDefinitionsSteps().I_disable_all_clouds();
         COMMON_STEP_DEFINITIONS.beforeScenario();
