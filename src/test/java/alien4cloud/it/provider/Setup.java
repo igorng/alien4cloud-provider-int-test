@@ -33,7 +33,7 @@ public class Setup {
 
     private static final CommonStepDefinitions COMMON_STEP_DEFINITIONS = new CommonStepDefinitions();
 
-    public static final Path LOCAL_TEST_DATA_PATH = Paths.get("src/test/resource");
+    public static final Path LOCAL_TEST_DATA_PATH = Paths.get("src/test/resources");
 
     private void cleanUp() throws Throwable {
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
