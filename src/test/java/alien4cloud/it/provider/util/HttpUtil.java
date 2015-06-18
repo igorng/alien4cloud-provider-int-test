@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class HttpAssert {
+public class HttpUtil {
 
     private static void sleepWhenErrorHappen(long before, long timeout) {
         if (System.currentTimeMillis() - before > timeout) {

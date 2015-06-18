@@ -33,6 +33,8 @@ public class Setup {
 
     private static final CommonStepDefinitions COMMON_STEP_DEFINITIONS = new CommonStepDefinitions();
 
+    public static final Path LOCAL_TEST_DATA_PATH = Paths.get("src/test/resource");
+
     private void cleanUp() throws Throwable {
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
             new ApplicationsDeploymentStepDefinitions().I_undeploy_it();
@@ -61,13 +63,17 @@ public class Setup {
         REPOSITORY_MANAGER.cloneOrCheckout(GIT_ARTIFACT_TARGET_PATH, gitURL, branch, localDirectoryName);
     }
 
+    private void uploadArchive(Path source) throws Throwable {
+        Path csarTargetPath = CSAR_TARGET_PATH.resolve(source.getFileName() + ".csar");
+        FileUtil.zip(source, csarTargetPath);
+        Context.getInstance().registerRestResponse(Context.getRestClientInstance().postMultipart("/rest/csars", "file", Files.newInputStream(csarTargetPath)));
+        COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
+    }
+
     @And("^I upload the git archive \"([^\"]*)\"$")
     public void I_upload_the_git_archive(String folderToUpload) throws Throwable {
         Path csarSourceFolder = GIT_ARTIFACT_TARGET_PATH.resolve(folderToUpload);
-        Path csarTargetPath = CSAR_TARGET_PATH.resolve(csarSourceFolder.getFileName() + ".csar");
-        FileUtil.zip(csarSourceFolder, csarTargetPath);
-        Context.getInstance().registerRestResponse(Context.getRestClientInstance().postMultipart("/rest/csars", "file", Files.newInputStream(csarTargetPath)));
-        COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
+        uploadArchive(csarSourceFolder);
     }
 
     @And("^I upload a plugin from maven artifact \"([^\"]*)\"$")
@@ -91,5 +97,11 @@ public class Setup {
         Files.copy(new RestClient(artifactUrl).getAsStream(""), tempFile, StandardCopyOption.REPLACE_EXISTING);
         Context.getInstance().registerRestResponse(Context.getRestClientInstance().postMultipart("/rest/plugin", "file", Files.newInputStream(tempFile)));
         COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
+    }
+
+    @And("^I upload the local archive \"([^\"]*)\"$")
+    public void I_upload_the_local_archive(String archive) throws Throwable {
+        Path archivePath = LOCAL_TEST_DATA_PATH.resolve(archive);
+        uploadArchive(archivePath);
     }
 }
