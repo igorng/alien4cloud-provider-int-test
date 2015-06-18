@@ -2,8 +2,6 @@ package alien4cloud.it.provider.util;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.KeyPair;
 import java.security.Security;
 
@@ -20,14 +18,12 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 
 @Slf4j
-public class SshUtil {
-
-    private static final Path PRIVATE_KEY_PATH = Paths.get("src/test/resources/keys/alienjenkins.pem");
+public class SSHUtil {
 
     private static KeyPair loadKeyPair(String pemFile) {
         try {
             Security.addProvider(new BouncyCastleProvider());
-            PEMParser pemParser = new PEMParser(new FileReader(PRIVATE_KEY_PATH.toFile()));
+            PEMParser pemParser = new PEMParser(new FileReader(pemFile));
             JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
             Object object = pemParser.readObject();
             return converter.getKeyPair((PEMKeyPair) object);
