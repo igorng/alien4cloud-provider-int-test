@@ -30,9 +30,9 @@ Feature: Reuse block storage with cloudify 2
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 10 minutes
 
-    When I upload the local file "data/helloWorld.txt" to the node "Compute"'s remote path "/var/myTestVolume/helloWorld.txt"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/myTestVolume/block_storage_test_file.txt"
     And I re-deploy the application
     Then The application's deployment must succeed after 10 minutes
 
-    When I download the remote file "/var/myTestVolume/helloWorld.txt" from the node "Compute"
-    Then The downloaded file should have the same content as the local file "data/helloWorld.txt"
+    When I download the remote file "/var/myTestVolume/block_storage_test_file.txt" from the node "Compute"
+    Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"

@@ -1,0 +1,1 @@
+Hello world ! I'm a block storage and I know that this file will not be lost between deployments

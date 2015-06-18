@@ -2,13 +2,10 @@ package alien4cloud.it.provider;
 
 import java.util.Map;
 
-import org.apache.commons.collections4.MapUtils;
+import org.junit.Assert;
 
-import alien4cloud.it.Context;
-import alien4cloud.it.application.ApplicationStepDefinitions;
+import alien4cloud.it.provider.util.AttributeUtil;
 import alien4cloud.it.provider.util.HttpUtil;
-import alien4cloud.rest.model.RestResponse;
-import alien4cloud.rest.utils.JsonUtil;
 import cucumber.api.java.en.And;
 
 public class HttpStepsDefinitions {
@@ -21,17 +18,16 @@ public class HttpStepsDefinitions {
     @And("^The URL which is defined in attribute \"([^\"]*)\" of the node \"([^\"]*)\" should work and the html should contain \"([^\"]*)\"$")
     public void The_URL_which_is_defined_in_attribute_of_the_node_should_work_and_the_html_should_contain(String attributeName, String nodeName,
             String expectedContent) throws Throwable {
-        RestResponse<?> response = JsonUtil.read(Context.getRestClientInstance().get(
-                "/rest/applications/" + ApplicationStepDefinitions.CURRENT_APPLICATION.getId() + "/environments/"
-                        + Context.getInstance().getDefaultApplicationEnvironmentId(ApplicationStepDefinitions.CURRENT_APPLICATION.getName())
-                        + "/deployment/informations"));
-        Map<String, Object> instancesInformation = (Map<String, Object>) response.getData();
-        org.junit.Assert.assertFalse(MapUtils.isEmpty(instancesInformation));
-        Map<String, Object> nodeInformation = (Map<String, Object>) instancesInformation.get(nodeName);
-        org.junit.Assert.assertFalse(MapUtils.isEmpty(nodeInformation));
-        Map<String, Object> instanceInformation = (Map<String, Object>) nodeInformation.values().iterator().next();
-        Map<String, Object> attributes = (Map<String, Object>) instanceInformation.get("attributes");
-        String url = (String) attributes.get(attributeName);
-        HttpUtil.checkUrl(url, expectedContent, 2 * 60 * 1000L);
+        HttpUtil.checkUrl(AttributeUtil.getAttribute(nodeName, attributeName), expectedContent, 2 * 60 * 1000L);
+    }
+
+    @And("^The URL\\(s\\) which are defined in attribute \"([^\"]*)\" of the (\\d+) instance\\(s\\) of the node \"([^\"]*)\" should work and the html should contain \"([^\"]*)\"$")
+    public void The_URL_s_which_are_defined_in_attribute_of_the_instance_s_of_the_node_should_work_and_the_html_should_contain(String attributeName,
+            int numberOfInstances, String nodeName, String expectedContent) throws Throwable {
+        Map<String, String> allAttributes = AttributeUtil.getAttributes(nodeName, attributeName);
+        Assert.assertEquals(numberOfInstances, allAttributes.size());
+        for (String url : allAttributes.values()) {
+            HttpUtil.checkUrl(url, expectedContent, 2 * 60 * 1000L);
+        }
     }
 }

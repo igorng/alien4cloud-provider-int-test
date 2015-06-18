@@ -1,6 +1,6 @@
-Feature: Deploy samples with cloudify 2
+Feature: Tomcat with custom command and scaling
 
-  Scenario: Tomcat
+  Scenario: Tomcat, this scenario test the tomcat recipe, custom command and scaling
     Given I am authenticated with "ADMIN" role
     And I have already created a cloud image with name "Ubuntu Trusty", architecture "x86_64", type "linux", distribution "Ubuntu" and version "14.04.1"
 
@@ -25,6 +25,7 @@ Feature: Deploy samples with cloudify 2
 
     # Application CFY 2
     And I create a new application with name "tomcat-cfy2" and description "Tomcat with CFY 2" based on the template with name "tomcat-war-0.1.0-SNAPSHOT"
+    When I update the node template "Compute"'s capability "scalable" of type "tosca.capabilities.Scalable"'s property "max_instances" to "3"
     And I assign the cloud with name "Cloudify 2" for the application
     And I set the input property "os_arch" of the topology to "x86_64"
     And I set the input property "os_type" of the topology to "linux"
@@ -36,6 +37,16 @@ Feature: Deploy samples with cloudify 2
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 10 minutes
+    And The URL which is defined in attribute "application_url" of the node "War" should work and the html should contain "Welcome to Fastconnect !"
+
+     # Scaling
+    When I scale up the node "Compute" by adding 1 instance(s)
+    Then I should receive a RestResponse with no error
+    And The node "War" should contain 2 instance(s) after at maximum 5 minutes
+    And The URL(s) which are defined in attribute "application_url" of the 2 instance(s) of the node "War" should work and the html should contain "Welcome to Fastconnect !"
+    When I scale down the node "Compute" by removing 1 instance(s)
+    Then I should receive a RestResponse with no error
+    And The node "War" should contain 1 instance(s) after at maximum 5 minutes
     And The URL which is defined in attribute "application_url" of the node "War" should work and the html should contain "Welcome to Fastconnect !"
 
     # Custom command
