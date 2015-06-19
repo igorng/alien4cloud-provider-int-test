@@ -17,7 +17,7 @@ Feature: Tomcat with custom command and scaling
     # Cloudify 2
     And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify2-provider"
     And I create a cloud with name "Cloudify 2" from cloudify 2 PaaS provider
-    And I update cloudify 2 manager's url to "https://129.185.67.22:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 2"
+    And I update cloudify 2 manager's url to "https://129.185.67.25:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 2"
 #    And I update cloudify 2 manager's url to "http://8.21.28.252:8100" for cloud with name "Cloudify 2"
     And I enable the cloud "Cloudify 2"
 #    And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 2" and match it to paaS image "RegionOne/cfba3478-8645-4bc8-97e8-707b9f41b14e"

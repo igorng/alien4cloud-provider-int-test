@@ -35,6 +35,12 @@ public class Setup {
 
     public static final Path LOCAL_TEST_DATA_PATH = Paths.get("src/test/resources");
 
+    public static final String SCP_USER = "root";
+
+    public static final int SCP_PORT = 22;
+
+    public static final String PEM_PATH = "src/test/resources/keys/alienjenkins.pem";
+
     private void cleanUp() throws Throwable {
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
             new ApplicationsDeploymentStepDefinitions().I_undeploy_it();
@@ -74,6 +80,7 @@ public class Setup {
     public void I_upload_the_git_archive(String folderToUpload) throws Throwable {
         Path csarSourceFolder = GIT_ARTIFACT_TARGET_PATH.resolve(folderToUpload);
         uploadArchive(csarSourceFolder);
+        COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
     }
 
     @And("^I upload a plugin from maven artifact \"([^\"]*)\"$")
@@ -103,5 +110,6 @@ public class Setup {
     public void I_upload_the_local_archive(String archive) throws Throwable {
         Path archivePath = LOCAL_TEST_DATA_PATH.resolve(archive);
         uploadArchive(archivePath);
+        COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
     }
 }
