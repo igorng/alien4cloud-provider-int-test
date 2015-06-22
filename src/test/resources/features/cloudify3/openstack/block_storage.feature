@@ -15,14 +15,16 @@ Feature: Reuse block storage with cloudify 3
     # Cloudify 3
     And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
     And I create a cloud with name "Cloudify 3" from cloudify 3 PaaS provider
-    And I update cloudify 3 manager's url to "https://129.185.67.25:8100" for cloud with name "Cloudify 3"
+    And I update cloudify 3 manager's url to "https://129.185.67.54:8100" for cloud with name "Cloudify 3"
     And I enable the cloud "Cloudify 3"
-    And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 3" and match it to paaS image "RegionOne/02ddfcbb-9534-44d7-974d-5cfd36dfbcab"
-    And I add the flavor with name "small", number of CPUs 2, disk size 34359738368 and memory size 2147483648 to the cloud "Cloudify 3" and match it to paaS flavor "RegionOne/2"
+    And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 3" and match it to paaS image "02ddfcbb-9534-44d7-974d-5cfd36dfbcab"
+    And I add the flavor with name "small", number of CPUs 2, disk size 34359738368 and memory size 2147483648 to the cloud "Cloudify 3" and match it to paaS flavor "2"
     And I add the storage with id "SmallBlock" and device "/dev/vdb" and size 1073741824 to the cloud "Cloudify 3"
     And I add the public network with name "public" to the cloud "Cloudify 3" and match it to paaS network "net-pub"
 
     And I create a new application with name "block-storage-cfy3" and description "Block Storage with CFY 3" based on the template with name "block_storage-0.1.0-SNAPSHOT"
+    And I add a node template "internet" related to the "tosca.nodes.Network:1.0.0.wd03-SNAPSHOT" node type
+    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd03-SNAPSHOT" with source "Compute" and target "internet" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
     And I assign the cloud with name "Cloudify 3" for the application
 
     When I deploy it

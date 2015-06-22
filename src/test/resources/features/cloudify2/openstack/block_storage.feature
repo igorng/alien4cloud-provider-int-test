@@ -32,6 +32,11 @@ Feature: Reuse block storage with cloudify 2
     And The application's deployment must succeed after 10 minutes
 
     When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/myTestVolume/block_storage_test_file.txt"
+    And I give deployment properties:
+      | deletable_blockstorage          | true |
+      | disable_self_healing            | true |
+      | events_lease_inHour             | 2    |
+      | startDetection_timeout_inSecond | 600  |
     And I re-deploy the application
     Then The application's deployment must succeed after 10 minutes
 

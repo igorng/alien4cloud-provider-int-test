@@ -14,27 +14,24 @@ Feature: Tomcat with custom command and scaling
     And I upload the git archive "samples/tomcat-war"
     And I upload the git archive "samples/topology-tomcatWar"
 
-    # Cloudify 2
-    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify2-provider"
-    And I create a cloud with name "Cloudify 2" from cloudify 2 PaaS provider
-    And I update cloudify 2 manager's url to "https://129.185.67.25:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 2"
-#    And I update cloudify 2 manager's url to "http://8.21.28.252:8100" for cloud with name "Cloudify 2"
-    And I enable the cloud "Cloudify 2"
-#    And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 2" and match it to paaS image "RegionOne/cfba3478-8645-4bc8-97e8-707b9f41b14e"
-    And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 2" and match it to paaS image "RegionOne/c3fcd822-0693-4fac-b8bb-c0f268225800"
-    And I add the flavor with name "small", number of CPUs 2, disk size 34359738368 and memory size 2147483648 to the cloud "Cloudify 2" and match it to paaS flavor "RegionOne/2"
+    # Cloudify 3
+    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+    And I create a cloud with name "Cloudify 3" from cloudify 3 PaaS provider
+    And I update cloudify 3 manager's url to "https://129.185.67.54:8100" for cloud with name "Cloudify 3"
+    And I enable the cloud "Cloudify 3"
+    And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 3" and match it to paaS image "02ddfcbb-9534-44d7-974d-5cfd36dfbcab"
+    And I add the flavor with name "small", number of CPUs 2, disk size 34359738368 and memory size 2147483648 to the cloud "Cloudify 3" and match it to paaS flavor "2"
 
-    # Application CFY 2
-    And I create a new application with name "tomcat-cfy2" and description "Tomcat with CFY 2" based on the template with name "tomcat-war-0.1.0-SNAPSHOT"
+    # Application CFY 3
+    And I create a new application with name "tomcat-cfy3" and description "Tomcat with CFY 3" based on the template with name "tomcat-war-0.1.0-SNAPSHOT"
     When I update the node template "Compute"'s capability "scalable" of type "tosca.capabilities.Scalable"'s property "max_instances" to "3"
-    And I assign the cloud with name "Cloudify 2" for the application
+    And I add a node template "internet" related to the "tosca.nodes.Network:1.0.0.wd03-SNAPSHOT" node type
+    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd03-SNAPSHOT" with source "Compute" and target "internet" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
+    And I assign the cloud with name "Cloudify 3" for the application
     And I set the input property "os_arch" of the topology to "x86_64"
     And I set the input property "os_type" of the topology to "linux"
     And I give deployment properties:
-      | deletable_blockstorage          | true |
-      | disable_self_healing            | true |
-      | events_lease_inHour             | 2    |
-      | startDetection_timeout_inSecond | 600  |
+      | deletable_blockstorage | true |
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 10 minutes
