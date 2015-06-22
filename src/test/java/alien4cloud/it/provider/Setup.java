@@ -55,8 +55,8 @@ public class Setup {
 
     @Before
     public void beforeScenario() throws Throwable {
-        AUTHENTICATION_STEP_DEFINITIONS.I_am_authenticated_with_role("ADMIN");
         cleanUp();
+        AUTHENTICATION_STEP_DEFINITIONS.I_am_authenticated_with_role("ADMIN");
     }
 
     @After
