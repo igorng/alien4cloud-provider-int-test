@@ -44,24 +44,18 @@ public class Setup {
 
     public static final AuthenticationStepDefinitions AUTHENTICATION_STEP_DEFINITIONS = new AuthenticationStepDefinitions();
 
-    private void cleanUp() throws Throwable {
+    @Before
+    public void beforeScenario() throws Throwable {
+        COMMON_STEP_DEFINITIONS.beforeScenario();
+    }
+
+    @After
+    public void afterScenario() throws Throwable {
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
             new ApplicationsDeploymentStepDefinitions().I_undeploy_it();
             ApplicationStepDefinitions.CURRENT_APPLICATION = null;
         }
         new CloudDefinitionsSteps().I_disable_all_clouds();
-    }
-
-    @Before
-    public void beforeScenario() throws Throwable {
-        COMMON_STEP_DEFINITIONS.beforeScenario();
-        AUTHENTICATION_STEP_DEFINITIONS.I_am_authenticated_with_role("ADMIN");
-    }
-
-    @After
-    public void afterScenario() throws Throwable {
-        cleanUp();
-        COMMON_STEP_DEFINITIONS.beforeScenario();
     }
 
     @And("^I checkout the git archive from url \"([^\"]*)\" branch \"([^\"]*)\"$")

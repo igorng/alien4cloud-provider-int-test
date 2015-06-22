@@ -1,7 +1,8 @@
 Feature: Reuse block storage with cloudify 2
 
   Scenario: Reuse of block storage should work
-    Given I have already created a cloud image with name "Ubuntu Trusty", architecture "x86_64", type "linux", distribution "Ubuntu" and version "14.04.1"
+    Given I am authenticated with "ADMIN" role
+    And I have already created a cloud image with name "Ubuntu Trusty", architecture "x86_64", type "linux", distribution "Ubuntu" and version "14.04.1"
 
     # Archives
     And I checkout the git archive from url "https://github.com/alien4cloud/tosca-normative-types.git" branch "master"
