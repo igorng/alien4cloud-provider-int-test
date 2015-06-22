@@ -13,6 +13,7 @@ import alien4cloud.it.application.ApplicationStepDefinitions;
 import alien4cloud.it.application.ApplicationsDeploymentStepDefinitions;
 import alien4cloud.it.cloud.CloudDefinitionsSteps;
 import alien4cloud.it.common.CommonStepDefinitions;
+import alien4cloud.it.security.AuthenticationStepDefinitions;
 import alien4cloud.rest.utils.RestClient;
 import alien4cloud.utils.FileUtil;
 import cucumber.api.java.After;
@@ -41,6 +42,8 @@ public class Setup {
 
     public static final String PEM_PATH = "src/test/resources/keys/alienjenkins.pem";
 
+    public static final AuthenticationStepDefinitions AUTHENTICATION_STEP_DEFINITIONS = new AuthenticationStepDefinitions();
+
     private void cleanUp() throws Throwable {
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
             new ApplicationsDeploymentStepDefinitions().I_undeploy_it();
@@ -52,6 +55,7 @@ public class Setup {
 
     @Before
     public void beforeScenario() throws Throwable {
+        AUTHENTICATION_STEP_DEFINITIONS.I_am_authenticated_with_role("ADMIN");
         cleanUp();
     }
 
