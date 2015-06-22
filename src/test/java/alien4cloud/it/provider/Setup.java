@@ -54,6 +54,7 @@ public class Setup {
 
     @Before
     public void beforeScenario() throws Throwable {
+        COMMON_STEP_DEFINITIONS.beforeScenario();
         AUTHENTICATION_STEP_DEFINITIONS.I_am_authenticated_with_role("ADMIN");
     }
 
