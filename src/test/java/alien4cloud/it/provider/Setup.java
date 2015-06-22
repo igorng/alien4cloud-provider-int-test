@@ -50,18 +50,17 @@ public class Setup {
             ApplicationStepDefinitions.CURRENT_APPLICATION = null;
         }
         new CloudDefinitionsSteps().I_disable_all_clouds();
-        COMMON_STEP_DEFINITIONS.beforeScenario();
     }
 
     @Before
     public void beforeScenario() throws Throwable {
-        cleanUp();
         AUTHENTICATION_STEP_DEFINITIONS.I_am_authenticated_with_role("ADMIN");
     }
 
     @After
     public void afterScenario() throws Throwable {
         cleanUp();
+        COMMON_STEP_DEFINITIONS.beforeScenario();
     }
 
     @And("^I checkout the git archive from url \"([^\"]*)\" branch \"([^\"]*)\"$")
