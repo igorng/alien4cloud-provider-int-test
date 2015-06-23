@@ -15,7 +15,7 @@ Feature: Reuse block storage with cloudify 2
     # Cloudify 2
     And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify2-provider"
     And I create a cloud with name "Cloudify 2" from cloudify 2 PaaS provider
-    And I update cloudify 2 manager's url to "https://129.185.67.22:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 2"
+    And I update cloudify 2 manager's url to "https://129.185.67.39:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 2"
 #    And I update cloudify 2 manager's url to "http://8.21.28.252:8100" for cloud with name "Cloudify 2"
     And I enable the cloud "Cloudify 2"
 #    And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 2" and match it to paaS image "RegionOne/cfba3478-8645-4bc8-97e8-707b9f41b14e"
@@ -31,7 +31,7 @@ Feature: Reuse block storage with cloudify 2
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 10 minutes
 
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/myTestVolume/block_storage_test_file.txt"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/myTestVolume/block_storage_test_file.txt" with the keypair "keys/cfy2.pem" and user "root"
     And I give deployment properties:
       | deletable_blockstorage          | true |
       | disable_self_healing            | true |
@@ -40,5 +40,5 @@ Feature: Reuse block storage with cloudify 2
     And I re-deploy the application
     Then The application's deployment must succeed after 10 minutes
 
-    When I download the remote file "/var/myTestVolume/block_storage_test_file.txt" from the node "Compute"
+    When I download the remote file "/var/myTestVolume/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy2.pem" and user "root"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"

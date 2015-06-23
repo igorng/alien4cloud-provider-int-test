@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.junit.Assert;
 
 import alien4cloud.git.RepositoryManager;
@@ -13,13 +15,13 @@ import alien4cloud.it.application.ApplicationStepDefinitions;
 import alien4cloud.it.application.ApplicationsDeploymentStepDefinitions;
 import alien4cloud.it.cloud.CloudDefinitionsSteps;
 import alien4cloud.it.common.CommonStepDefinitions;
-import alien4cloud.it.security.AuthenticationStepDefinitions;
 import alien4cloud.rest.utils.RestClient;
 import alien4cloud.utils.FileUtil;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 
+@Slf4j
 public class Setup {
 
     private static final RepositoryManager REPOSITORY_MANAGER = new RepositoryManager();
@@ -34,28 +36,40 @@ public class Setup {
 
     private static final CommonStepDefinitions COMMON_STEP_DEFINITIONS = new CommonStepDefinitions();
 
-    public static final Path LOCAL_TEST_DATA_PATH = Paths.get("src/test/resources");
+    private static final ApplicationsDeploymentStepDefinitions APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS = new ApplicationsDeploymentStepDefinitions();
 
-    public static final String SCP_USER = "root";
+    private static final CloudDefinitionsSteps CLOUD_DEFINITIONS_STEPS = new CloudDefinitionsSteps();
+
+    public static final Path LOCAL_TEST_DATA_PATH = Paths.get("src/test/resources");
 
     public static final int SCP_PORT = 22;
 
-    public static final String PEM_PATH = "src/test/resources/keys/alienjenkins.pem";
-
-    public static final AuthenticationStepDefinitions AUTHENTICATION_STEP_DEFINITIONS = new AuthenticationStepDefinitions();
-
     @Before
     public void beforeScenario() throws Throwable {
+        log.info("Clean up before scenario");
         COMMON_STEP_DEFINITIONS.beforeScenario();
     }
 
-    @After
+//    @After
     public void afterScenario() throws Throwable {
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
-            new ApplicationsDeploymentStepDefinitions().I_undeploy_it();
+            log.info("Clean up deployed application");
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it();
             ApplicationStepDefinitions.CURRENT_APPLICATION = null;
         }
-        new CloudDefinitionsSteps().I_disable_all_clouds();
+        CLOUD_DEFINITIONS_STEPS.I_disable_all_clouds();
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                log.info("Wait for resources to be released on cloudify side before terminating the VM");
+                // TODO For asynchronous problem of cloudify
+                try {
+                    Thread.sleep(60 * 1000L);
+                } catch (InterruptedException e) {
+                }
+                log.info("Finished waiting, the VM will be terminated right after");
+            }
+        });
     }
 
     @And("^I checkout the git archive from url \"([^\"]*)\" branch \"([^\"]*)\"$")
