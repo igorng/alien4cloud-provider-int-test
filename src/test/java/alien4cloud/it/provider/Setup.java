@@ -50,7 +50,7 @@ public class Setup {
         COMMON_STEP_DEFINITIONS.beforeScenario();
     }
 
-//    @After
+    @After
     public void afterScenario() throws Throwable {
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
             log.info("Clean up deployed application");
