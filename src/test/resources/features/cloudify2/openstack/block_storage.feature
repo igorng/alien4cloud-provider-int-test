@@ -29,7 +29,7 @@ Feature: Reuse block storage with cloudify 2
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 10 minutes
 
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/myTestVolume/block_storage_test_file.txt"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/myTestVolume/block_storage_test_file.txt" with the keypair "keys/cfy2.pem" and user "root"
     And I give deployment properties:
       | deletable_blockstorage          | true |
       | disable_self_healing            | true |
@@ -38,5 +38,5 @@ Feature: Reuse block storage with cloudify 2
     And I re-deploy the application
     Then The application's deployment must succeed after 10 minutes
 
-    When I download the remote file "/var/myTestVolume/block_storage_test_file.txt" from the node "Compute"
+    When I download the remote file "/var/myTestVolume/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy2.pem" and user "root"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"

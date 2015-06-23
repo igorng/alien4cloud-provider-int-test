@@ -12,10 +12,11 @@ import cucumber.api.java.en.When;
 
 public class ScpStepsDefinitions {
 
-    @When("^I upload the local file \"([^\"]*)\" to the node \"([^\"]*)\"'s remote path \"([^\"]*)\"$")
-    public void I_upload_the_local_file_to_the_node_s_remote_path(String localFile, String nodeName, String remotePath) throws Throwable {
-        SSHUtil.upload(Setup.SCP_USER, AttributeUtil.getAttribute(nodeName, "public_ip_address"), Setup.SCP_PORT, Setup.PEM_PATH, remotePath,
-                Setup.LOCAL_TEST_DATA_PATH.resolve(localFile).toString());
+    @When("^I upload the local file \"([^\"]*)\" to the node \"([^\"]*)\"'s remote path \"([^\"]*)\" with the keypair \"([^\"]*)\" and user \"([^\"]*)\"$")
+    public void I_upload_the_local_file_to_the_node_s_remote_path_with_the_keypair_and_user(String localFile, String nodeName, String remotePath,
+            String keypair, String user) throws Throwable {
+        SSHUtil.upload(user, AttributeUtil.getAttribute(nodeName, "public_ip_address"), Setup.SCP_PORT, Setup.LOCAL_TEST_DATA_PATH.resolve(keypair).toString(),
+                remotePath, Setup.LOCAL_TEST_DATA_PATH.resolve(localFile).toString());
     }
 
     private static final String CURRENT_DOWNLOADED_FILE_PATH;
@@ -28,10 +29,11 @@ public class ScpStepsDefinitions {
         }
     }
 
-    @When("^I download the remote file \"([^\"]*)\" from the node \"([^\"]*)\"$")
-    public void I_download_the_remote_file_from_the_node(String remoteFilePath, String nodeName) throws Throwable {
-        SSHUtil.download(Setup.SCP_USER, AttributeUtil.getAttribute(nodeName, "public_ip_address"), Setup.SCP_PORT, Setup.PEM_PATH, remoteFilePath,
-                CURRENT_DOWNLOADED_FILE_PATH);
+    @When("^I download the remote file \"([^\"]*)\" from the node \"([^\"]*)\" with the keypair \"([^\"]*)\" and user \"([^\"]*)\"$")
+    public void I_download_the_remote_file_from_the_node_with_the_keypair_and_user(String remoteFilePath, String nodeName, String keypair, String user)
+            throws Throwable {
+        SSHUtil.download(user, AttributeUtil.getAttribute(nodeName, "public_ip_address"), Setup.SCP_PORT, Setup.LOCAL_TEST_DATA_PATH.resolve(keypair)
+                .toString(), remoteFilePath, CURRENT_DOWNLOADED_FILE_PATH);
     }
 
     @Then("^The downloaded file should have the same content as the local file \"([^\"]*)\"$")

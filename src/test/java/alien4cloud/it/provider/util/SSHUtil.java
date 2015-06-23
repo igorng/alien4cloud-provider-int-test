@@ -17,8 +17,6 @@ import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 
-import alien4cloud.it.provider.Setup;
-
 @Slf4j
 public class SSHUtil {
 
@@ -96,10 +94,5 @@ public class SSHUtil {
                 scpClient.upload(local, remote, ScpClient.Option.Recursive);
             }
         });
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        upload(Setup.SCP_USER, "129.185.67.41", Setup.SCP_PORT, Setup.PEM_PATH, "/var/myTestVolume/",
-                Setup.LOCAL_TEST_DATA_PATH.resolve("data/block_storage_test_file.txt").toString());
     }
 }
