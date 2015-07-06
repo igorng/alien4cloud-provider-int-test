@@ -24,7 +24,7 @@ Feature: Reuse block storage with cloudify 2
     And I add the storage with id "SmallBlock" and device "/dev/vdb" and size 1073741824 to the cloud "Cloudify 2"
     And I match the storage with name "SmallBlock" of the cloud "Cloudify 2" to the PaaS resource "SMALL_BLOCK"
 
-    And I create a new application with name "block-storage-cfy2" and description "Block Storage with CFY 2" based on the template with name "block_storage-0.1.0-SNAPSHOT"
+    And I create a new application with name "block-storage-cfy2" and description "Block Storage with CFY 2" based on the template with name "block_storage"
     And I assign the cloud with name "Cloudify 2" for the application
 
     When I deploy it

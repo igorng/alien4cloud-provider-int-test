@@ -31,7 +31,7 @@ Feature: Deploy samples with cloudify 2
     And I match the storage with name "SmallBlock" of the cloud "Cloudify 2" to the PaaS resource "SMALL_BLOCK"
 
     # Application CFY 2
-    And I create a new application with name "wordpress-cfy2" and description "Wordpress with CFY 2" based on the template with name "wordpress-template-1.1.0-SNAPSHOT"
+    And I create a new application with name "wordpress-cfy2" and description "Wordpress with CFY 2" based on the template with name "wordpress-template"
     And I assign the cloud with name "Cloudify 2" for the application
     And I set the input property "os_arch" of the topology to "x86_64"
     And I set the input property "os_type" of the topology to "linux"
