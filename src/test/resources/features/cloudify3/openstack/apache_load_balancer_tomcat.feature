@@ -1,6 +1,6 @@
 Feature: Deploy load balancer with cloudify 3
 
-  Scenario: Wordpress
+  Scenario: Apache load balancer and tomcat
     Given I am authenticated with "ADMIN" role
     And I have already created a cloud image with name "Ubuntu Trusty", architecture "x86_64", type "linux", distribution "Ubuntu" and version "14.04.1"
 
@@ -34,7 +34,7 @@ Feature: Deploy load balancer with cloudify 3
     And The application's deployment must succeed after 10 minutes
     And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to Fastconnect !"
 
-    When I trigger on the node template "War" the custom command "update_war_file" of the interface "custom" for application "tomcat-cfy3" with parameters:
+    When I trigger on the node template "War" the custom command "update_war_file" of the interface "custom" for application "load-balancer-cfy3" with parameters:
       | WAR_URL | https://github.com/alien4cloud/alien4cloud-cloudify3-provider/raw/develop/src/test/resources/data/war-examples/helloWorld.war |
     And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to testDeployArtifactOverriddenTest !"
 
