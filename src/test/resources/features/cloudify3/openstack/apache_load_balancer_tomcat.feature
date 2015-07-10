@@ -31,7 +31,7 @@ Feature: Deploy load balancer with cloudify 3
 
     When I deploy it
     Then I should receive a RestResponse with no error
-    And The application's deployment must succeed after 10 minutes
+    And The application's deployment must succeed after 15 minutes
     And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to Fastconnect !"
 
     When I trigger on the node template "War" the custom command "update_war_file" of the interface "custom" for application "load-balancer-cfy3" with parameters:
