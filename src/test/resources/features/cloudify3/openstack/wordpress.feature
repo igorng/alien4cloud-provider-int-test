@@ -20,7 +20,7 @@ Feature: Deploy samples with cloudify 3
     # Cloudify 3
     And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
     And I create a cloud with name "Cloudify 3" from cloudify 3 PaaS provider
-    And I update cloudify 3 manager's url to "http://129.185.67.107:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 3"
+    And I update cloudify 3 manager's url to "http://129.185.67.110:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 3"
     And I enable the cloud "Cloudify 3"
     And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 3" and match it to paaS image "c3fcd822-0693-4fac-b8bb-c0f268225800"
     And I add the flavor with name "small", number of CPUs 2, disk size 34359738368 and memory size 2147483648 to the cloud "Cloudify 3" and match it to paaS flavor "2"
@@ -29,7 +29,7 @@ Feature: Deploy samples with cloudify 3
     And I add the storage with id "SmallBlock" and device "/dev/vdb" and size 1073741824 to the cloud "Cloudify 3"
 
     # Application CFY 3
-    And I create a new application with name "wordpress-cfy3" and description "Wordpress with CFY 3" based on the template with name "wordpress-template-1.1.0-SNAPSHOT"
+    And I create a new application with name "wordpress-cfy3" and description "Wordpress with CFY 3" based on the template with name "wordpress-template"
     And I assign the cloud with name "Cloudify 3" for the application
     And I add a node template "DbStorage" related to the "alien.nodes.ConfigurableBlockStorage:1.0-SNAPSHOT" node type
     And I update the node template "DbStorage"'s property "location" to "/var/mysql"
