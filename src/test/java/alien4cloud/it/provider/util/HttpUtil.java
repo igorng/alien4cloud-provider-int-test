@@ -39,7 +39,7 @@ public class HttpUtil {
                     if (log.isDebugEnabled()) {
                         log.debug("Status code " + response.getStatusLine().getStatusCode());
                     }
-                    if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() < 300) {
+                    if (response.getStatusLine().getStatusCode() < 200 || response.getStatusLine().getStatusCode() >= 300) {
                         sleepWhenErrorHappen(before, timeout);
                         continue;
                     }
