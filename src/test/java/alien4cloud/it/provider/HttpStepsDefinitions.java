@@ -31,13 +31,13 @@ public class HttpStepsDefinitions {
 
     @And("^The URL which is defined in attribute \"([^\"]*)\" of the node \"([^\"]*)\" should work and the html should contain \"([^\"]*)\"$")
     public void The_URL_which_is_defined_in_attribute_of_the_node_should_work_and_the_html_should_contain(String attributeName, String nodeName,
-                                                                                                          String expectedContent) throws Throwable {
+            String expectedContent) throws Throwable {
         HttpUtil.checkUrl(AttributeUtil.getAttribute(nodeName, attributeName), expectedContent, 2 * 60 * 1000L);
     }
 
     @And("^The URL\\(s\\) which are defined in attribute \"([^\"]*)\" of the (\\d+) instance\\(s\\) of the node \"([^\"]*)\" should work and the html should contain \"([^\"]*)\"$")
     public void The_URL_s_which_are_defined_in_attribute_of_the_instance_s_of_the_node_should_work_and_the_html_should_contain(String attributeName,
-                                                                                                                               int numberOfInstances, String nodeName, String expectedContent) throws Throwable {
+            int numberOfInstances, String nodeName, String expectedContent) throws Throwable {
         Map<String, String> allAttributes = AttributeUtil.getAttributes(nodeName, attributeName);
         Assert.assertEquals(numberOfInstances, allAttributes.size());
         for (String url : allAttributes.values()) {
@@ -47,7 +47,7 @@ public class HttpStepsDefinitions {
 
     @And("^The URL which is defined in attribute \"([^\"]*)\" of the node \"([^\"]*)\" should work and the html should contain \"([^\"]*)\" and \"([^\"]*)\"$")
     public void The_URL_which_is_defined_in_attribute_of_the_node_should_work_and_the_html_should_contain_and(String attributeName, String nodeName,
-                                                                                                              String expectedContent, String otherExpectedContent) throws Throwable {
+            String expectedContent, String otherExpectedContent) throws Throwable {
         The_URL_which_is_defined_in_attribute_of_the_node_should_work_and_the_html_should_contain(attributeName, nodeName, expectedContent);
         The_URL_which_is_defined_in_attribute_of_the_node_should_work_and_the_html_should_contain(attributeName, nodeName, otherExpectedContent);
     }
@@ -104,7 +104,7 @@ public class HttpStepsDefinitions {
 
     @And("^The URL which is defined in attribute \"([^\"]*)\" of the node \"([^\"]*)\" should work and the html should contain \"([^\"]*)\" or \"([^\"]*)\"$")
     public void The_URL_which_is_defined_in_attribute_of_the_node_should_work_and_the_html_should_contain_or(final String attributeName, final String nodeName,
-                                                                                                             final String expectedContent, final String otherExpectedContent) throws Throwable {
+            final String expectedContent, final String otherExpectedContent) throws Throwable {
         final ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool(new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
@@ -125,6 +125,8 @@ public class HttpStepsDefinitions {
         }
         if (!futureCallback.isSuccessful()) {
             throw new RuntimeException("None of the urls to check is valid");
+        } else {
+            log.info("Test has been successfull");
         }
         executor.shutdownNow();
     }
