@@ -124,4 +124,9 @@ public class Setup {
         uploadArchive(archivePath);
         COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
     }
+
+    @And("^I should wait for (\\d+) seconds before continuing the test$")
+    public void I_should_wait_for_seconds_before_continuing_the_test(int sleepTimeInSeconds) throws Throwable {
+        Thread.sleep(sleepTimeInSeconds);
+    }
 }

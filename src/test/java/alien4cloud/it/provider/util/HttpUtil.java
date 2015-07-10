@@ -39,11 +39,10 @@ public class HttpUtil {
                     if (log.isDebugEnabled()) {
                         log.debug("Status code " + response.getStatusLine().getStatusCode());
                     }
-                    if (response.getStatusLine().getStatusCode() == 404) {
+                    if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() < 300) {
                         sleepWhenErrorHappen(before, timeout);
                         continue;
                     }
-                    Assert.assertTrue(response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() < 300);
                     String responseText = EntityUtils.toString(response.getEntity());
                     if (log.isDebugEnabled()) {
                         log.debug(responseText);
