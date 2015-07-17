@@ -46,6 +46,8 @@ Feature: Deploy samples with cloudify 3
     And I set the input property "os_type" of the topology to "linux"
     And I select the network with name "public" for my node "internet"
     And I select the network with name "private" for my node "privateNetwork"
+    And I give deployment properties:
+      | deletable_blockstorage | true |
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 10 minutes

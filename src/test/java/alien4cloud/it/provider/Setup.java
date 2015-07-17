@@ -31,6 +31,21 @@ public class Setup {
 
     private static final CloudDefinitionsSteps CLOUD_DEFINITIONS_STEPS = new CloudDefinitionsSteps();
 
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                log.info("Wait for resources to be released on cloudify side before terminating the VM");
+                // TODO For asynchronous problem of cloudify
+                try {
+                    Thread.sleep(60 * 1000L);
+                } catch (InterruptedException e) {
+                }
+                log.info("Finished waiting, the VM will be terminated right after");
+            }
+        });
+    }
+
     @Before
     public void beforeScenario() throws Throwable {
         log.info("Clean up before scenario");
@@ -45,18 +60,6 @@ public class Setup {
             ApplicationStepDefinitions.CURRENT_APPLICATION = null;
         }
         CLOUD_DEFINITIONS_STEPS.I_disable_all_clouds();
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                log.info("Wait for resources to be released on cloudify side before terminating the VM");
-                // TODO For asynchronous problem of cloudify
-                try {
-                    Thread.sleep(60 * 1000L);
-                } catch (InterruptedException e) {
-                }
-                log.info("Finished waiting, the VM will be terminated right after");
-            }
-        });
     }
 
     @And("^I checkout the git archive from url \"([^\"]*)\" branch \"([^\"]*)\"$")
@@ -115,6 +118,6 @@ public class Setup {
     @And("^I should wait for (\\d+) seconds before continuing the test$")
     public void I_should_wait_for_seconds_before_continuing_the_test(int sleepTimeInSeconds) throws Throwable {
         log.info("Begin sleeping to wait before continuing the test");
-        Thread.sleep(sleepTimeInSeconds);
+        Thread.sleep(sleepTimeInSeconds * 1000L);
     }
 }

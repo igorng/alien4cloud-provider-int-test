@@ -46,8 +46,6 @@ Feature: Deploy load balancer with cloudify 3
     When I scale down the node "WebServer" by removing 1 instance(s)
     Then I should receive a RestResponse with no error
     And The node "War" should contain 1 instance(s) after at maximum 10 minutes
-    # Wait for the scale has finished really
-    And I should wait for 120 seconds before continuing the test
   # For the moment there are synchronization problem we disable this test for the moment
 #    And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to testDeployArtifactOverriddenTest !" or "Welcome to Fastconnect !"
 #    And I should wait for 30 seconds before continuing the test
