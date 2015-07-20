@@ -37,3 +37,8 @@ Feature: Reuse block storage with cloudify 2
 
     When I download the remote file "/var/myTestVolume/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy2.pem" and user "root"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
+
+    When I undeploy it
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "ConfigurableBlockStorage"
+    # Delete the volume so do not have any leaks
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "ConfigurableBlockStorage"
