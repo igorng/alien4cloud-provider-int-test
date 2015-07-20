@@ -41,4 +41,5 @@ Feature: Reuse block storage with cloudify 2
     When I undeploy it
     Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "ConfigurableBlockStorage"
     # Delete the volume so do not have any leaks
+    Then I should wait for 60 seconds before continuing the test
     Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "ConfigurableBlockStorage"
