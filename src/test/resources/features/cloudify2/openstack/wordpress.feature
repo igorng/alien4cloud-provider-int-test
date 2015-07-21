@@ -20,7 +20,7 @@ Feature: Deploy samples with cloudify 2
     # Cloudify 2
     And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify2-provider"
     And I create a cloud with name "Cloudify 2" from cloudify 2 PaaS provider
-    And I update cloudify 2 manager's url to "https://129.185.67.39:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 2"
+    And I update cloudify 2 manager's url to the OpenStack's jenkins management server for cloud with name "Cloudify 2"
 #    And I update cloudify 2 manager's url to "http://129.185.67.97:8100" for cloud with name "Cloudify 2"
     And I enable the cloud "Cloudify 2"
     And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 2" and match it to paaS image "RegionOne/c3fcd822-0693-4fac-b8bb-c0f268225800"
@@ -31,7 +31,7 @@ Feature: Deploy samples with cloudify 2
     And I match the storage with name "SmallBlock" of the cloud "Cloudify 2" to the PaaS resource "SMALL_BLOCK"
 
     # Application CFY 2
-    And I create a new application with name "wordpress-cfy2" and description "Wordpress with CFY 2" based on the template with name "wordpress-template-1.1.0-SNAPSHOT"
+    And I create a new application with name "wordpress-cfy2" and description "Wordpress with CFY 2" based on the template with name "wordpress-template"
     And I assign the cloud with name "Cloudify 2" for the application
     And I set the input property "os_arch" of the topology to "x86_64"
     And I set the input property "os_type" of the topology to "linux"

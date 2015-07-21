@@ -10,22 +10,20 @@ Feature: Tomcat with custom command and scaling
     And I checkout the git archive from url "https://github.com/alien4cloud/alien4cloud-extended-types.git" branch "master"
     And I upload the git archive "alien4cloud-extended-types/alien-base-types-1.0-SNAPSHOT"
     And I upload the git archive "alien4cloud-extended-types/alien-extended-storage-types-1.0-SNAPSHOT"
-    And I checkout the git archive from url "https://github.com/alien4cloud/samples.git" branch "master"
+    And I checkout the git archive from url "https://github.com/alien4cloud/samples.git" branch "cfy2"
     And I upload the git archive "samples/tomcat-war"
     And I upload the git archive "samples/topology-tomcatWar"
 
     # Cloudify 2
     And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify2-provider"
     And I create a cloud with name "Cloudify 2" from cloudify 2 PaaS provider
-    And I update cloudify 2 manager's url to "https://129.185.67.39:8100" with login "Superuser" and password "Superuser" for cloud with name "Cloudify 2"
-#    And I update cloudify 2 manager's url to "http://8.21.28.252:8100" for cloud with name "Cloudify 2"
+    And I update cloudify 2 manager's url to the OpenStack's jenkins management server for cloud with name "Cloudify 2"
     And I enable the cloud "Cloudify 2"
-#    And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 2" and match it to paaS image "RegionOne/cfba3478-8645-4bc8-97e8-707b9f41b14e"
     And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 2" and match it to paaS image "RegionOne/c3fcd822-0693-4fac-b8bb-c0f268225800"
     And I add the flavor with name "small", number of CPUs 2, disk size 34359738368 and memory size 2147483648 to the cloud "Cloudify 2" and match it to paaS flavor "RegionOne/2"
 
     # Application CFY 2
-    And I create a new application with name "tomcat-cfy2" and description "Tomcat with CFY 2" based on the template with name "tomcat-war-0.1.0-SNAPSHOT"
+    And I create a new application with name "tomcat-cfy2" and description "Tomcat with CFY 2" based on the template with name "tomcat-war"
     When I update the node template "Compute"'s capability "scalable" of type "tosca.capabilities.Scalable"'s property "max_instances" to "3"
     And I assign the cloud with name "Cloudify 2" for the application
     And I set the input property "os_arch" of the topology to "x86_64"
