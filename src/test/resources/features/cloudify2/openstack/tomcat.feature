@@ -35,17 +35,17 @@ Feature: Tomcat with custom command and scaling
       | startDetection_timeout_inSecond | 600  |
     When I deploy it
     Then I should receive a RestResponse with no error
-    And The application's deployment must succeed after 10 minutes
+    And The application's deployment must succeed after 15 minutes
     And The URL which is defined in attribute "application_url" of the node "War" should work and the html should contain "Welcome to Fastconnect !"
 
      # Scaling
     When I scale up the node "Compute" by adding 1 instance(s)
     Then I should receive a RestResponse with no error
-    And The node "War" should contain 2 instance(s) after at maximum 10 minutes
+    And The node "War" should contain 2 instance(s) after at maximum 15 minutes
     And The URL(s) which are defined in attribute "application_url" of the 2 instance(s) of the node "War" should work and the html should contain "Welcome to Fastconnect !"
     When I scale down the node "Compute" by removing 1 instance(s)
     Then I should receive a RestResponse with no error
-    And The node "War" should contain 1 instance(s) after at maximum 10 minutes
+    And The node "War" should contain 1 instance(s) after at maximum 15 minutes
     And The URL which is defined in attribute "application_url" of the node "War" should work and the html should contain "Welcome to Fastconnect !"
 
     # Custom command
