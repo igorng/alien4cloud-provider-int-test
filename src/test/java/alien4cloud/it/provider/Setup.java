@@ -82,7 +82,6 @@ public class Setup {
     public void I_upload_the_git_archive(String folderToUpload) throws Throwable {
         Path csarSourceFolder = Context.GIT_ARTIFACT_TARGET_PATH.resolve(folderToUpload);
         uploadArchive(csarSourceFolder);
-        COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
     }
 
     @And("^I upload a plugin from maven artifact \"([^\"]*)\"$")
@@ -112,7 +111,6 @@ public class Setup {
     public void I_upload_the_local_archive(String archive) throws Throwable {
         Path archivePath = Context.LOCAL_TEST_DATA_PATH.resolve(archive);
         uploadArchive(archivePath);
-        COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
     }
 
     @And("^I should wait for (\\d+) seconds before continuing the test$")
