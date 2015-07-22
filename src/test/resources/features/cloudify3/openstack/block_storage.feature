@@ -29,11 +29,11 @@ Feature: Reuse block storage with cloudify 3
 
     When I deploy it
     Then I should receive a RestResponse with no error
-    And The application's deployment must succeed after 10 minutes
+    And The application's deployment must succeed after 15 minutes
 
     When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/myTestVolume/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
     And I re-deploy the application
-    Then The application's deployment must succeed after 10 minutes
+    Then The application's deployment must succeed after 15 minutes
 
     When I download the remote file "/var/myTestVolume/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"

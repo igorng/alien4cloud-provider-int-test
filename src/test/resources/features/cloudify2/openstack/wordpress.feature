@@ -54,5 +54,5 @@ Feature: Deploy samples with cloudify 2
       | startDetection_timeout_inSecond | 600  |
     When I deploy it
     Then I should receive a RestResponse with no error
-    And The application's deployment must succeed after 10 minutes
+    And The application's deployment must succeed after 15 minutes
     And The URL which is defined in attribute "wordpress_url" of the node "wordpress" should work
