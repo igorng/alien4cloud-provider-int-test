@@ -1,5 +1,8 @@
 Feature: Reuse block storage with cloudify 2
-
+  # Tested features with this scenario:
+  #   - Block storage
+  #   - Reuse of an existing block storage
+  #   - Usage of multiple block storage on the same compute
   Scenario: Deploying a compute with multiple (types of) storages attached should work
     Given I am authenticated with "ADMIN" role
     And I have already created a cloud image with name "Ubuntu Trusty", architecture "x86_64", type "linux", distribution "Ubuntu" and version "14.04.1"

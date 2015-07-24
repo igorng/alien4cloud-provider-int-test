@@ -1,5 +1,8 @@
 Feature: Deploy samples with cloudify 3
-
+  # Tested features with this scenario:
+  #   - Network
+  #   - Clean up block storage if deletable_blockstorage is set
+  #   - Deployment of wordpress
   Scenario: Wordpress
     Given I am authenticated with "ADMIN" role
     And I have already created a cloud image with name "Ubuntu Trusty", architecture "x86_64", type "linux", distribution "Ubuntu" and version "14.04.1"

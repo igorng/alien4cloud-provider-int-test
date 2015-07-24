@@ -1,0 +1,1 @@
+I will be preserved and should be copied to the remote's machine

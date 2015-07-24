@@ -1,6 +1,8 @@
-Feature: Reuse block storage with cloudify 3
-
-  Scenario: Reuse of block storage should work
+Feature: Block storage
+  # Tested features with this scenario:
+  #   - Block storage
+  #   - Reuse of an existing block storage
+  Scenario: Block storage
     Given I am authenticated with "ADMIN" role
     And I have already created a cloud image with name "Ubuntu Trusty", architecture "x86_64", type "linux", distribution "Ubuntu" and version "14.04.1"
 

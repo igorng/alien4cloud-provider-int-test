@@ -1,6 +1,13 @@
-Feature: Deploy load balancer with cloudify 3
-
-  Scenario: Apache load balancer and tomcat
+Feature: Apache load balancer + tomcat
+  # Tested features with this scenario:
+  #   - Floating IP
+  #   - Topology's output
+  #   - concat function
+  #   - get_operation_output function
+  #   - Scale up/down
+  #   - Custom command
+  #   - Deployment of tomcat and apache load balancer
+  Scenario: Apache load balancer + tomcat
     Given I am authenticated with "ADMIN" role
     And I have already created a cloud image with name "Ubuntu Trusty", architecture "x86_64", type "linux", distribution "Ubuntu" and version "14.04.1"
 
@@ -35,7 +42,7 @@ Feature: Deploy load balancer with cloudify 3
     And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to Fastconnect !"
 
     When I trigger on the node template "War" the custom command "update_war_file" of the interface "custom" for application "load-balancer-cfy3" with parameters:
-      | WAR_URL | https://github.com/alien4cloud/alien4cloud-cloudify3-provider/raw/develop/src/test/resources/data/war-examples/helloWorld.war |
+      | WAR_URL | https://github.com/alien4cloud/alien4cloud-provider-int-test/raw/develop/src/test/resources/data/helloWorld.war |
     And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to testDeployArtifactOverriddenTest !"
 
     When I scale up the node "WebServer" by adding 1 instance(s)
