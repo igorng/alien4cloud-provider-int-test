@@ -22,6 +22,7 @@ Feature: Tomcat with custom command and scaling
 
     # Cloudify 2
     And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify2-provider"
+#    And I upload a plugin from "../alien4cloud-cloudify2-provider"
     And I create a cloud with name "Cloudify 2" from cloudify 2 PaaS provider
     And I update cloudify 2 manager's url to the OpenStack's jenkins management server for cloud with name "Cloudify 2"
     And I enable the cloud "Cloudify 2"

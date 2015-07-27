@@ -24,6 +24,7 @@ Feature: Apache load balancer + tomcat
 
      # Cloudify 3
     And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+#    And I upload a plugin from "../alien4cloud-cloudify3-provider"
     And I create a cloud with name "Cloudify 3" from cloudify 3 PaaS provider
     And I update cloudify 3 manager's url to the OpenStack's jenkins management server for cloud with name "Cloudify 3"
     And I enable the cloud "Cloudify 3"
