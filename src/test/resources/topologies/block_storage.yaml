@@ -13,7 +13,6 @@ topology_template:
     CBS1:
       type: alien.nodes.ConfigurableBlockStorage
       properties:
-        device: /dev/vdb
         location: /var/cbs1
         file_system: ext4
       requirements:
@@ -24,7 +23,6 @@ topology_template:
     CBS2:
       type: alien.nodes.ConfigurableBlockStorage
       properties:
-        device: /dev/vdc
         location: /var/cbs2
         file_system: ext4
       requirements:
@@ -35,7 +33,6 @@ topology_template:
     CBS3:
       type: alien.nodes.ConfigurableBlockStorage
       properties:
-        device: /dev/vdd
         location: /var/cbs3
         file_system: ext4
       requirements:
@@ -46,7 +43,6 @@ topology_template:
     CBS4:
       type: alien.nodes.ConfigurableBlockStorage
       properties:
-        device: /dev/vde
         location: /var/cbs4
         file_system: ext4
       requirements:
