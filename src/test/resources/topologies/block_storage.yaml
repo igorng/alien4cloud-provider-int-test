@@ -10,11 +10,44 @@ imports:
 
 topology_template:
   node_templates:
-    ConfigurableBlockStorage:
+    CBS1:
       type: alien.nodes.ConfigurableBlockStorage
       properties:
         device: /dev/vdb
-        location: /var/myTestVolume
+        location: /var/cbs1
+        file_system: ext4
+      requirements:
+        - attachment:
+            node: Compute
+            capability: tosca.capabilities.Attachment
+            relationship: tosca.relationships.AttachTo
+    CBS2:
+      type: alien.nodes.ConfigurableBlockStorage
+      properties:
+        device: /dev/vdc
+        location: /var/cbs2
+        file_system: ext4
+      requirements:
+        - attachment:
+            node: Compute
+            capability: tosca.capabilities.Attachment
+            relationship: tosca.relationships.AttachTo
+    CBS3:
+      type: alien.nodes.ConfigurableBlockStorage
+      properties:
+        device: /dev/vdd
+        location: /var/cbs3
+        file_system: ext4
+      requirements:
+        - attachment:
+            node: Compute
+            capability: tosca.capabilities.Attachment
+            relationship: tosca.relationships.AttachTo
+    CBS4:
+      type: alien.nodes.ConfigurableBlockStorage
+      properties:
+        device: /dev/vde
+        location: /var/cbs4
         file_system: ext4
       requirements:
         - attachment:

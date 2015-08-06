@@ -15,14 +15,17 @@ Feature: Block storage
     And I upload the local archive "topologies/block_storage.yaml"
 
     # Cloudify 3
-    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
-#    And I upload a plugin from "../alien4cloud-cloudify3-provider"
+#    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+    And I upload a plugin from "../alien4cloud-cloudify3-provider"
     And I create a cloud with name "Cloudify 3" from cloudify 3 PaaS provider
     And I update cloudify 3 manager's url to the OpenStack's jenkins management server for cloud with name "Cloudify 3"
     And I enable the cloud "Cloudify 3"
     And I add the cloud image "Ubuntu Trusty" to the cloud "Cloudify 3" and match it to paaS image "02ddfcbb-9534-44d7-974d-5cfd36dfbcab"
     And I add the flavor with name "small", number of CPUs 2, disk size 34359738368 and memory size 2147483648 to the cloud "Cloudify 3" and match it to paaS flavor "2"
-    And I add the storage with id "SmallBlock" and device "/dev/vdb" and size 1073741824 to the cloud "Cloudify 3"
+    And I add the storage with id "SmallBlock1" and device "/dev/vdb" and size 1073741824 to the cloud "Cloudify 3"
+    And I add the storage with id "SmallBlock2" and device "/dev/vdc" and size 1073741824 to the cloud "Cloudify 3"
+    And I add the storage with id "SmallBlock3" and device "/dev/vdd" and size 1073741824 to the cloud "Cloudify 3"
+    And I add the storage with id "SmallBlock4" and device "/dev/vde" and size 1073741824 to the cloud "Cloudify 3"
     And I add the public network with name "public" to the cloud "Cloudify 3" and match it to paaS network "net-pub"
 
     And I create a new application with name "block-storage-cfy3" and description "Block Storage with CFY 3" based on the template with name "block_storage"
@@ -34,15 +37,30 @@ Feature: Block storage
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
 
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/myTestVolume/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs1/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs2/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs3/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs4/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
+
     And I re-deploy the application
     Then The application's deployment must succeed after 15 minutes
 
-    When I download the remote file "/var/myTestVolume/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/var/cbs1/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
-
+    When I download the remote file "/var/cbs2/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
+    When I download the remote file "/var/cbs3/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
+    When I download the remote file "/var/cbs4/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
     When I undeploy it
-    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "ConfigurableBlockStorage"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS1"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS2"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS3"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS4"
     # Delete the volume so do not have any leaks
     Then I should wait for 20 seconds before continuing the test
-    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "ConfigurableBlockStorage"
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS1"
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS2"
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS3"
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS4"
