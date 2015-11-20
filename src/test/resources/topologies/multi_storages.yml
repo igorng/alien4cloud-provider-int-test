@@ -5,8 +5,8 @@ template_version: 0.1.0-SNAPSHOT
 template_author: admin
 
 imports:
-  - tosca-normative-types:1.0.0.wd03-SNAPSHOT
-  - alien-extended-storage-types:1.0-SNAPSHOT
+  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
+  - alien-extended-storage-types:1.1.0-SNAPSHOT
   - test-int-types:1.0-SNAPSHOT
 
 topology_template:
@@ -30,7 +30,7 @@ topology_template:
             node: Compute
             capability: tosca.capabilities.Attachment
             relationship: tosca.relationships.AttachTo
-            
+
     CustomStorageWithVolumeId:
       type: alien.test.nodes.ConfigurableBlockStorage
       properties:
@@ -42,9 +42,9 @@ topology_template:
             node: Compute
             capability: tosca.capabilities.Attachment
             relationship: tosca.relationships.AttachTo
-            
+
     ConfigurableBlockStorage:
-      type: alien.nodes.ConfigurableBlockStorage
+      type: tosca.nodes.BlockStorage
       properties:
         location: /var/myTestVolume
         file_system: ext4
@@ -52,4 +52,4 @@ topology_template:
         - attachment:
             node: Compute
             capability: tosca.capabilities.Attachment
-            relationship: tosca.relationships.AttachTo            
+            relationship: tosca.relationships.AttachTo

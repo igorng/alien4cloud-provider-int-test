@@ -1,8 +1,8 @@
 package alien4cloud.it.provider;
 
+import alien4cloud.it.orchestrators.OrchestratorsConfigurationDefinitionsSteps;
 import org.apache.commons.collections4.MapUtils;
 
-import alien4cloud.it.cloud.CloudDefinitionsSteps;
 import cucumber.api.java.en.Given;
 
 public class DefaultValuesStepDefinitions {
@@ -20,7 +20,7 @@ public class DefaultValuesStepDefinitions {
         String url = MapUtils.getString(System.getenv(), CDFY_URL_KEY, DEFAULT_CDFY_URL);
         String login = MapUtils.getString(System.getenv(), CDFY_USERNAME_KEY, DEFAULT_CDFY_USERNAME);
         String password = MapUtils.getString(System.getenv(), CDFY_PASSWORD_KEY, DEFAULT_CDFY_PASSWORD);
-        new CloudDefinitionsSteps().I_update_cloudify_manager_s_url_to_with_login_and_password_for_cloud_with_name(cloudifyVersion, url, login, password,
+        new OrchestratorsConfigurationDefinitionsSteps().I_update_cloudify_manager_s_url_to_with_login_and_password_for_cloud_with_name(cloudifyVersion, url, login, password,
                 cloudName);
     }
 

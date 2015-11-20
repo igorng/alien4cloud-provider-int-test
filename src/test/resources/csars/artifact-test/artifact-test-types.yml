@@ -5,12 +5,11 @@ template_author: Alien4cloud
 template_version: 1.0.0-SNAPSHOT
 
 imports:
-  - tosca-normative-types:1.0.0.wd03-SNAPSHOT
+  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
 
 description: Tomcat recipe, including war type and relationship.
 
 node_types:
-
   alien.nodes.Artifacts:
     derived_from: tosca.nodes.SoftwareComponent
     artifacts:
@@ -25,7 +24,6 @@ node_types:
         create: scripts/assertArtifactsCopiedForNode.sh
 
 relationship_types:
-
   alien.relationships.ArtifactsHostedOnCompute:
     derived_from: tosca.relationships.HostedOn
     artifacts:

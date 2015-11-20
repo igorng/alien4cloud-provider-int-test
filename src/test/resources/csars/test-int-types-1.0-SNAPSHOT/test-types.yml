@@ -7,9 +7,9 @@ template_author: Alien4Cloud
 template_version: 1.0-SNAPSHOT
 
 imports:
-  - tosca-normative-types:1.0.0.wd03-SNAPSHOT
+  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
   - alien-base-types:1.0-SNAPSHOT
-  - alien-extended-storage-types:1.0-SNAPSHOT
+  - alien-extended-storage-types:1.1.0-SNAPSHOT
 
 node_types:
   alien.test.nodes.ConfigurableBlockStorage:
@@ -22,11 +22,11 @@ node_types:
         type: string
     interfaces:
       Standard:
-        create: 
+        create:
           inputs:
             DEVICE: { get_property: [SELF, device]}
           implementation: scripts/attach.groovy
-        configure: 
+        configure:
           inputs:
             LOCATION: { get_property: [SELF, location]}
           implementation: scripts/mount.groovy

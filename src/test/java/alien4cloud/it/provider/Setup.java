@@ -11,9 +11,9 @@ import org.junit.Assert;
 import alien4cloud.git.RepositoryManager;
 import alien4cloud.it.Context;
 import alien4cloud.it.application.ApplicationStepDefinitions;
-import alien4cloud.it.application.ApplicationsDeploymentStepDefinitions;
-import alien4cloud.it.cloud.CloudDefinitionsSteps;
+import alien4cloud.it.application.deployment.ApplicationsDeploymentStepDefinitions;
 import alien4cloud.it.common.CommonStepDefinitions;
+import alien4cloud.it.orchestrators.OrchestratorsDefinitionsSteps;
 import alien4cloud.rest.utils.RestClient;
 import alien4cloud.utils.FileUtil;
 import cucumber.api.java.After;
@@ -29,7 +29,7 @@ public class Setup {
 
     private static final ApplicationsDeploymentStepDefinitions APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS = new ApplicationsDeploymentStepDefinitions();
 
-    private static final CloudDefinitionsSteps CLOUD_DEFINITIONS_STEPS = new CloudDefinitionsSteps();
+    private static final  OrchestratorsDefinitionsSteps ORCHESTRATORS_DEFINITIONS_STEPS = new OrchestratorsDefinitionsSteps();
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -59,7 +59,7 @@ public class Setup {
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it();
             ApplicationStepDefinitions.CURRENT_APPLICATION = null;
         }
-        CLOUD_DEFINITIONS_STEPS.I_disable_all_clouds();
+        ORCHESTRATORS_DEFINITIONS_STEPS.I_disable_all_orchestrators();
     }
 
     @And("^I checkout the git archive from url \"([^\"]*)\" branch \"([^\"]*)\"$")
@@ -103,7 +103,7 @@ public class Setup {
         String artifactUrl = Context.FASTCONNECT_NEXUS + "r=" + repository + "&g=" + groupId + "&a=" + artifactId + "&v=" + version + "&p=zip";
         Path tempFile = Files.createTempFile(null, null);
         Files.copy(new RestClient(artifactUrl).getAsStream(""), tempFile, StandardCopyOption.REPLACE_EXISTING);
-        Context.getInstance().registerRestResponse(Context.getRestClientInstance().postMultipart("/rest/plugin", "file", Files.newInputStream(tempFile)));
+        Context.getInstance().registerRestResponse(Context.getRestClientInstance().postMultipart("/rest/plugins", "file", Files.newInputStream(tempFile)));
         COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
     }
 

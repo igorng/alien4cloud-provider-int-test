@@ -5,59 +5,524 @@ template_version: 0.1.0-SNAPSHOT
 template_author: admin
 
 imports:
-  - tosca-normative-types:1.0.0.wd03-SNAPSHOT
-  - alien-extended-storage-types:1.0-SNAPSHOT
+  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
+  - alien-extended-storage-types:1.1.0-SNAPSHOT
 
 topology_template:
   node_templates:
-    CBS1:
-      type: alien.nodes.ConfigurableBlockStorage
+    Compute:
+      type: tosca.nodes.Compute
+      requirements:
+        - network:
+            node: PublicNetwork
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network
+      capabilities:
+        endpoint:
+          properties:
+            protocol: tcp
+            initiator: source
+            network_name: PRIVATE
+            secure: true
+        os:
+          properties:
+            type: linux
+        scalable:
+          properties:
+            min_instances: 1
+            max_instances: 1
+            default_instances: 1
+    PublicNetwork:
+      type: tosca.nodes.Network
       properties:
-        location: /var/cbs1
-        file_system: ext4
+        ip_version: 4
+    CBS1:
+      type: tosca.nodes.BlockStorage
       requirements:
         - attachment:
             node: Compute
             capability: tosca.capabilities.Attachment
             relationship: tosca.relationships.AttachTo
     CBS2:
-      type: alien.nodes.ConfigurableBlockStorage
-      properties:
-        location: /var/cbs2
-        file_system: ext4
+      type: tosca.nodes.BlockStorage
       requirements:
         - attachment:
             node: Compute
             capability: tosca.capabilities.Attachment
             relationship: tosca.relationships.AttachTo
     CBS3:
-      type: alien.nodes.ConfigurableBlockStorage
-      properties:
-        location: /var/cbs3
-        file_system: ext4
+      type: tosca.nodes.BlockStorage
       requirements:
         - attachment:
             node: Compute
             capability: tosca.capabilities.Attachment
             relationship: tosca.relationships.AttachTo
     CBS4:
-      type: alien.nodes.ConfigurableBlockStorage
-      properties:
-        location: /var/cbs4
-        file_system: ext4
+      type: tosca.nodes.BlockStorage
       requirements:
         - attachment:
             node: Compute
             capability: tosca.capabilities.Attachment
             relationship: tosca.relationships.AttachTo
-    Compute:
-      type: tosca.nodes.Compute
+    LinuxFileSystem-1:
+      type: alien.nodes.LinuxFileSystem
       properties:
-        os_arch: x86_64
-        os_type: linux
-      capabilities:
-        scalable:
-          properties:
-            max_instances: 1
-            min_instances: 1
-            default_instances: 1
+        fs_type: ext4
+        location: /var/cbs1
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: CBS1
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
+    LinuxFileSystem-2:
+      type: alien.nodes.LinuxFileSystem
+      properties:
+        fs_type: ext4
+        location: /var/cbs2
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: CBS2
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
+    LinuxFileSystem-3:
+      type: alien.nodes.LinuxFileSystem
+      properties:
+        fs_type: ext4
+        location: /var/cbs3
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: CBS3
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
+    LinuxFileSystem-4:
+      type: alien.nodes.LinuxFileSystem
+      properties:
+        fs_type: ext4
+        location: /var/cbs4
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: CBS4
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
+  workflows:
+    uninstall:
+      steps:
+        CBS3_uninstall:
+          node: CBS3
+          activity:
+            delegate: uninstall
+        Compute_uninstall:
+          node: Compute
+          activity:
+            delegate: uninstall
+        CBS4_uninstall:
+          node: CBS4
+          activity:
+            delegate: uninstall
+        CBS1_uninstall:
+          node: CBS1
+          activity:
+            delegate: uninstall
+        CBS2_uninstall:
+          node: CBS2
+          activity:
+            delegate: uninstall
+        LinuxFileSystem_stopping:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: stopping
+          on-success:
+            - stop_LinuxFileSystem
+        stop_LinuxFileSystem:
+          node: LinuxFileSystem-1
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.stop
+          on-success:
+            - LinuxFileSystem_stopped
+        LinuxFileSystem_stopped:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: stopped
+          on-success:
+            - LinuxFileSystem_deleting
+        LinuxFileSystem_deleting:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: deleting
+          on-success:
+            - LinuxFileSystem_deleted
+        LinuxFileSystem_deleted:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: deleted
+          on-success:
+            - Compute_uninstall
+            - CBS1_uninstall
+        LinuxFileSystem-2_stopping:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: stopping
+          on-success:
+            - stop_LinuxFileSystem-2
+        stop_LinuxFileSystem-2:
+          node: LinuxFileSystem-2
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.stop
+          on-success:
+            - LinuxFileSystem-2_stopped
+        LinuxFileSystem-2_stopped:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: stopped
+          on-success:
+            - LinuxFileSystem-2_deleting
+        LinuxFileSystem-2_deleting:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: deleting
+          on-success:
+            - LinuxFileSystem-2_deleted
+        LinuxFileSystem-2_deleted:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: deleted
+          on-success:
+            - Compute_uninstall
+            - CBS2_uninstall
+        LinuxFileSystem-3_stopping:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: stopping
+          on-success:
+            - stop_LinuxFileSystem-3
+        stop_LinuxFileSystem-3:
+          node: LinuxFileSystem-3
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.stop
+          on-success:
+            - LinuxFileSystem-3_stopped
+        LinuxFileSystem-3_stopped:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: stopped
+          on-success:
+            - LinuxFileSystem-3_deleting
+        LinuxFileSystem-3_deleting:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: deleting
+          on-success:
+            - LinuxFileSystem-3_deleted
+        LinuxFileSystem-3_deleted:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: deleted
+          on-success:
+            - CBS3_uninstall
+            - Compute_uninstall
+        LinuxFileSystem-4_stopping:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: stopping
+          on-success:
+            - stop_LinuxFileSystem-4
+        stop_LinuxFileSystem-4:
+          node: LinuxFileSystem-4
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.stop
+          on-success:
+            - LinuxFileSystem-4_stopped
+        LinuxFileSystem-4_stopped:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: stopped
+          on-success:
+            - LinuxFileSystem-4_deleting
+        LinuxFileSystem-4_deleting:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: deleting
+          on-success:
+            - LinuxFileSystem-4_deleted
+        LinuxFileSystem-4_deleted:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: deleted
+          on-success:
+            - Compute_uninstall
+            - CBS4_uninstall
+        PublicNetwork_uninstall:
+          node: PublicNetwork
+          activity:
+            delegate: uninstall
+    install:
+      steps:
+        Compute_install:
+          node: Compute
+          activity:
+            delegate: install
+          on-success:
+            - LinuxFileSystem-2_initial
+            - LinuxFileSystem_initial
+            - LinuxFileSystem-3_initial
+            - LinuxFileSystem-4_initial
+        CBS1_install:
+          node: CBS1
+          activity:
+            delegate: install
+          on-success:
+            - LinuxFileSystem_initial
+        CBS4_install:
+          node: CBS4
+          activity:
+            delegate: install
+          on-success:
+            - LinuxFileSystem-4_initial
+        CBS2_install:
+          node: CBS2
+          activity:
+            delegate: install
+          on-success:
+            - LinuxFileSystem-2_initial
+        CBS3_install:
+          node: CBS3
+          activity:
+            delegate: install
+          on-success:
+            - LinuxFileSystem-3_initial
+        LinuxFileSystem_initial:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: initial
+          on-success:
+            - LinuxFileSystem_creating
+        LinuxFileSystem_creating:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: creating
+          on-success:
+            - LinuxFileSystem_created
+        LinuxFileSystem_created:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: created
+          on-success:
+            - LinuxFileSystem_configuring
+        LinuxFileSystem_configuring:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: configuring
+          on-success:
+            - configure_LinuxFileSystem
+        configure_LinuxFileSystem:
+          node: LinuxFileSystem-1
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.configure
+          on-success:
+            - LinuxFileSystem_configured
+        LinuxFileSystem_configured:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: configured
+          on-success:
+            - LinuxFileSystem_starting
+        LinuxFileSystem_starting:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: starting
+          on-success:
+            - start_LinuxFileSystem
+        start_LinuxFileSystem:
+          node: LinuxFileSystem-1
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.start
+          on-success:
+            - LinuxFileSystem_started
+        LinuxFileSystem_started:
+          node: LinuxFileSystem-1
+          activity:
+            set_state: started
+        LinuxFileSystem-2_initial:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: initial
+          on-success:
+            - LinuxFileSystem-2_creating
+        LinuxFileSystem-2_creating:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: creating
+          on-success:
+            - LinuxFileSystem-2_created
+        LinuxFileSystem-2_created:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: created
+          on-success:
+            - LinuxFileSystem-2_configuring
+        LinuxFileSystem-2_configuring:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: configuring
+          on-success:
+            - configure_LinuxFileSystem-2
+        configure_LinuxFileSystem-2:
+          node: LinuxFileSystem-2
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.configure
+          on-success:
+            - LinuxFileSystem-2_configured
+        LinuxFileSystem-2_configured:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: configured
+          on-success:
+            - LinuxFileSystem-2_starting
+        LinuxFileSystem-2_starting:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: starting
+          on-success:
+            - start_LinuxFileSystem-2
+        start_LinuxFileSystem-2:
+          node: LinuxFileSystem-2
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.start
+          on-success:
+            - LinuxFileSystem-2_started
+        LinuxFileSystem-2_started:
+          node: LinuxFileSystem-2
+          activity:
+            set_state: started
+        LinuxFileSystem-3_initial:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: initial
+          on-success:
+            - LinuxFileSystem-3_creating
+        LinuxFileSystem-3_creating:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: creating
+          on-success:
+            - LinuxFileSystem-3_created
+        LinuxFileSystem-3_created:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: created
+          on-success:
+            - LinuxFileSystem-3_configuring
+        LinuxFileSystem-3_configuring:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: configuring
+          on-success:
+            - configure_LinuxFileSystem-3
+        configure_LinuxFileSystem-3:
+          node: LinuxFileSystem-3
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.configure
+          on-success:
+            - LinuxFileSystem-3_configured
+        LinuxFileSystem-3_configured:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: configured
+          on-success:
+            - LinuxFileSystem-3_starting
+        LinuxFileSystem-3_starting:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: starting
+          on-success:
+            - start_LinuxFileSystem-3
+        start_LinuxFileSystem-3:
+          node: LinuxFileSystem-3
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.start
+          on-success:
+            - LinuxFileSystem-3_started
+        LinuxFileSystem-3_started:
+          node: LinuxFileSystem-3
+          activity:
+            set_state: started
+        LinuxFileSystem-4_initial:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: initial
+          on-success:
+            - LinuxFileSystem-4_creating
+        LinuxFileSystem-4_creating:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: creating
+          on-success:
+            - LinuxFileSystem-4_created
+        LinuxFileSystem-4_created:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: created
+          on-success:
+            - LinuxFileSystem-4_configuring
+        LinuxFileSystem-4_configuring:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: configuring
+          on-success:
+            - configure_LinuxFileSystem-4
+        configure_LinuxFileSystem-4:
+          node: LinuxFileSystem-4
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.configure
+          on-success:
+            - LinuxFileSystem-4_configured
+        LinuxFileSystem-4_configured:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: configured
+          on-success:
+            - LinuxFileSystem-4_starting
+        LinuxFileSystem-4_starting:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: starting
+          on-success:
+            - start_LinuxFileSystem-4
+        start_LinuxFileSystem-4:
+          node: LinuxFileSystem-4
+          activity:
+            call_operation: tosca.interfaces.node.lifecycle.Standard.start
+          on-success:
+            - LinuxFileSystem-4_started
+        LinuxFileSystem-4_started:
+          node: LinuxFileSystem-4
+          activity:
+            set_state: started
+        PublicNetwork_install:
+          node: PublicNetwork
+          activity:
+            delegate: install
