@@ -1,4 +1,4 @@
-Feature: Deploy samples with cloudify 3
+Feature: Deploy wordpress with cloudify 3
   # Tested features with this scenario:
   #   - Network
   #   - Clean up block storage if deletable_blockstorage is set
@@ -35,10 +35,11 @@ Feature: Deploy samples with cloudify 3
     And I create a resource of type "alien.nodes.openstack.Image" named "Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "id" to "02ddfcbb-9534-44d7-974d-5cfd36dfbcab" for the resource named "Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
     And I autogenerate the on-demand resources for the location "Mount doom orchestrator"/"Thark location"
+    And I create a resource of type "alien.nodes.openstack.PrivateNetwork" named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the property "cidr" to "192.168.1.0/24" for the resource named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the property "gateway_ip" to "192.168.1.1" for the resource named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
     And I create a resource of type "alien.nodes.openstack.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property complexe "floating_network_name" to "net-pub" of "floatingip" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    # And I add the network with name "private" and CIDR "192.168.1.0/24" and IP version 4 and gateway "192.168.1.1" to the cloud "Cloudify 3"
-    # And I add the storage with id "SmallBlock" and device "/dev/vdb" and size 1073741824 to the cloud "Cloudify 3"
 
     # Application CFY 3
     And I create a new application with name "wordpress-cfy3" and description "Wordpress with CFY 3" based on the template with name "wordpress-template"
@@ -48,17 +49,18 @@ Feature: Deploy samples with cloudify 3
     And I update the node template "DbStorage"'s property "device" to "/dev/vdb"
     And I update the node template "DbStorage"'s property "file_system" to "ext4"
     And I update the node template "mysql"'s property "storage_path" to "/var/mysql"
-    And I add a relationship of type "tosca.relationships.AttachTo" defined in archive "tosca-normative-types" version "1.0.0.wd03-SNAPSHOT" with source "DbStorage" and target "computeDb" for requirement "attachment" of type "tosca.capabilities.Attachment" and target capability "attach"
-    And I add a node template "internet" related to the "tosca.nodes.Network:1.0.0.wd03-SNAPSHOT" node type
-    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd03-SNAPSHOT" with source "computeWww" and target "internet" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
-    And I add a node template "privateNetwork" related to the "tosca.nodes.Network:1.0.0.wd03-SNAPSHOT" node type
-    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd03-SNAPSHOT" with source "computeDb" and target "privateNetwork" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
-    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd03-SNAPSHOT" with source "computeWww" and target "privateNetwork" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
+    And I add a relationship of type "tosca.relationships.AttachTo" defined in archive "tosca-normative-types" version "1.0.0.wd06-SNAPSHOT" with source "DbStorage" and target "computeDb" for requirement "attachment" of type "tosca.capabilities.Attachment" and target capability "attach"
+    And I add a node template "internet" related to the "tosca.nodes.Network:1.0.0.wd06-SNAPSHOT" node type
+    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd06-SNAPSHOT" with source "computeWww" and target "internet" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
+    And I add a node template "privateNetwork" related to the "tosca.nodes.Network:1.0.0.wd06-SNAPSHOT" node type
+    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd06-SNAPSHOT" with source "computeDb" and target "privateNetwork" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
+    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd06-SNAPSHOT" with source "computeWww" and target "privateNetwork" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
+    When I substitute on the current application the node "internet" with the location resource "Mount doom orchestrator"/"Thark location"/"Internet"
+    When I substitute on the current application the node "privateNetwork" with the location resource "Mount doom orchestrator"/"Thark location"/"PrivateNetwork"
     And I set the following inputs properties
       | os_arch | x86_64 |
       | os_type | linux |
-#    And I give deployment properties:
-#      | deletable_blockstorage | true |
+
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
