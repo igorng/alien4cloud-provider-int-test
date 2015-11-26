@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # This is coming from nodes
 if [ -z "$confs_directory" ]; then
     echo "confs_directory is not set"
