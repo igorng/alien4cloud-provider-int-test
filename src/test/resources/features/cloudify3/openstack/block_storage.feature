@@ -25,7 +25,6 @@ Feature: Block storage
     And I create a location named "Thark location" and infrastructure type "openstack" to the orchestrator "Mount doom orchestrator"
     And I create a resource of type "alien.nodes.openstack.Flavor" named "Small" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "id" to "2" for the resource named "Small" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the capability "os" property "type" to "2" for the resource named "Small" related to the location "Mount doom orchestrator"/"Thark location"
     And I create a resource of type "alien.nodes.openstack.Image" named "Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "id" to "02ddfcbb-9534-44d7-974d-5cfd36dfbcab" for the resource named "Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
     And I autogenerate the on-demand resources for the location "Mount doom orchestrator"/"Thark location"
@@ -33,8 +32,6 @@ Feature: Block storage
     And I update the property complexe "floating_network_name" to "net-pub" of "floatingip" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
     And I create a resource of type "alien.cloudify.openstack.nodes.Volume" named "SmallBlock" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "size" to "1 gib" for the resource named "SmallBlock" related to the location "Mount doom orchestrator"/"Thark location"
-    And I create a resource of type "alien.nodes.openstack.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the property complexe "floating_network_name" to "net-pub" of "floatingip" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
 
     And I create a new application with name "block-storage-cfy3" and description "Block Storage with CFY 3" based on the template with name "block_storage"
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
@@ -62,13 +59,11 @@ Feature: Block storage
     When I download the remote file "/var/cbs4/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
     When I undeploy it
-    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS1"
-    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS2"
-    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS3"
-    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS4"
-    # Delete the volume so do not have any leaks
-    Then I should wait for 20 seconds before continuing the test
-    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS1"
-    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS2"
-    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS3"
-    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS4"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS1" for "block-storage-cfy3"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS2" for "block-storage-cfy3"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS3" for "block-storage-cfy3"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS4" for "block-storage-cfy3"
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS1" for "block-storage-cfy3"
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS2" for "block-storage-cfy3"
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS3" for "block-storage-cfy3"
+    Then I delete the volume on OpenStack with id defined in property "volume_id" of the node "CBS4" for "block-storage-cfy3"
