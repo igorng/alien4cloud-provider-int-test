@@ -22,8 +22,8 @@ Feature: Apache load balancer + tomcat
     And I upload the git archive "samples/topology-load-balancer-tomcat"
 
     # Cloudify 3
-    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
-    # And I upload a plugin from "../alien4cloud-cloudify3-provider"
+#    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+    And I upload a plugin from "../alien4cloud-cloudify3-provider"
 
     # Orchestrator and location
     And I create an orchestrator named "Mount doom orchestrator" and plugin id "alien-cloudify-3-orchestrator:1.1.0-SM8-SNAPSHOT" and bean name "cloudify-orchestrator"
@@ -37,32 +37,34 @@ Feature: Apache load balancer + tomcat
     And I update the property "id" to "02ddfcbb-9534-44d7-974d-5cfd36dfbcab" for the resource named "Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
     And I autogenerate the on-demand resources for the location "Mount doom orchestrator"/"Thark location"
     And I create a resource of type "alien.nodes.openstack.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the property complexe "floating_network_name" to "net-pub" of "floatingip" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "floatingip" to """{floating_network_name: net-pub}""" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "server" to """{security_groups: [openbar]}""" for the resource named "Small_Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
 
     And I create a new application with name "load-balancer-cfy3" and description "Apache load balancer with CFY 3" based on the template with name "apache-load-balancer"
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
     And I set the following inputs properties
       | os_arch | x86_64 |
-      | os_type | linux |
+      | os_type | linux  |
 
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
     And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to Fastconnect !"
+    And I should wait for 30 seconds before continuing the test
 
     When I trigger on the node template "War" the custom command "update_war_file" of the interface "custom" for application "load-balancer-cfy3" with parameters:
       | WAR_URL | https://github.com/alien4cloud/alien4cloud-provider-int-test/raw/develop/src/test/resources/data/helloWorld.war |
     And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to testDeployArtifactOverriddenTest !"
 
     # Scale up/down part
-#    When I scale up the node "WebServer" by adding 1 instance(s)
-#    Then I should receive a RestResponse with no error
-#    And The node "War" should contain 2 instance(s) after at maximum 15 minutes
-#    # Test that it's load balanced !! And so we can sometimes get web page from the overidden one, sometimes from the original
-#    And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to testDeployArtifactOverriddenTest !" and "Welcome to Fastconnect !"
-#    When I scale down the node "WebServer" by removing 1 instance(s)
-#    Then I should receive a RestResponse with no error
-#    And The node "War" should contain 1 instance(s) after at maximum 15 minutes
-  # For the moment there are synchronization problem we disable this test for the moment
+    When I scale up the node "WebServer" by adding 1 instance(s)
+    Then I should receive a RestResponse with no error
+    And The node "War" should contain 2 instance(s) after at maximum 15 minutes
+    # Test that it's load balanced !! And so we can sometimes get web page from the overidden one, sometimes from the original
+    And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to testDeployArtifactOverriddenTest !" and "Welcome to Fastconnect !"
+    When I scale down the node "WebServer" by removing 1 instance(s)
+    Then I should receive a RestResponse with no error
+    And The node "War" should contain 1 instance(s) after at maximum 15 minutes
+#  For the moment there are synchronization problem we disable this test for the moment
 #    And The URL which is defined in attribute "load_balancer_url" of the node "ApacheLoadBalancer" should work and the html should contain "Welcome to testDeployArtifactOverriddenTest !" or "Welcome to Fastconnect !"
 #    And I should wait for 30 seconds before continuing the test

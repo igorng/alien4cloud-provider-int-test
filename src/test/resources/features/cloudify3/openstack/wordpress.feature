@@ -20,8 +20,8 @@ Feature: Deploy wordpress with cloudify 3
     And I upload the git archive "samples/topology-wordpress"
 
     # Cloudify 3
-    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
-    # And I upload a plugin from "../alien4cloud-cloudify3-provider"
+#    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+    And I upload a plugin from "../alien4cloud-cloudify3-provider"
 
     # Orchestrator and location
     And I create an orchestrator named "Mount doom orchestrator" and plugin id "alien-cloudify-3-orchestrator:1.1.0-SM8-SNAPSHOT" and bean name "cloudify-orchestrator"
@@ -38,7 +38,8 @@ Feature: Deploy wordpress with cloudify 3
     And I update the property "cidr" to "192.168.1.0/24" for the resource named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "gateway_ip" to "192.168.1.1" for the resource named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
     And I create a resource of type "alien.nodes.openstack.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the property complexe "floating_network_name" to "net-pub" of "floatingip" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "floatingip" to """{floating_network_name: net-pub}""" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "server" to """{security_groups: [openbar]}""" for the resource named "Small_Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
 
     # Application CFY 3
     And I create a new application with name "wordpress-cfy3" and description "Wordpress with CFY 3" based on the template with name "wordpress-template"
@@ -58,7 +59,7 @@ Feature: Deploy wordpress with cloudify 3
     When I substitute on the current application the node "privateNetwork" with the location resource "Mount doom orchestrator"/"Thark location"/"PrivateNetwork"
     And I set the following inputs properties
       | os_arch | x86_64 |
-      | os_type | linux |
+      | os_type | linux  |
 
     When I deploy it
     Then I should receive a RestResponse with no error
