@@ -115,6 +115,11 @@ public class Setup {
 
     @And("^I should wait for (\\d+) seconds before continuing the test$")
     public void I_should_wait_for_seconds_before_continuing_the_test(int sleepTimeInSeconds) throws Throwable {
+        I_wait_for_seconds_before_continuing_the_test(sleepTimeInSeconds);
+    }
+
+    @And("^I wait for (\\d+) seconds before continuing the test$")
+    public void I_wait_for_seconds_before_continuing_the_test(int sleepTimeInSeconds) throws Throwable {
         log.info("Begin sleeping to wait before continuing the test");
         Thread.sleep(sleepTimeInSeconds * 1000L);
     }
