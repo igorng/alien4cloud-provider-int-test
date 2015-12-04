@@ -38,8 +38,8 @@ Feature: Deploy wordpress with cloudify 3
     And I update the property "cidr" to "192.168.1.0/24" for the resource named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "gateway_ip" to "192.168.1.1" for the resource named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
     And I create a resource of type "alien.nodes.openstack.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the complex property "floatingip" to """{floating_network_name: net-pub}""" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the complex property "server" to """{security_groups: [openbar]}""" for the resource named "Small_Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "floatingip" to """{"floating_network_name": "net-pub"}""" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "server" to """{"security_groups": ["openbar"]}""" for the resource named "Small_Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
 
     # Application CFY 3
     And I create a new application with name "wordpress-cfy3" and description "Wordpress with CFY 3" based on the template with name "wordpress-template"

@@ -37,8 +37,8 @@ Feature: Apache load balancer + tomcat
     And I update the property "id" to "02ddfcbb-9534-44d7-974d-5cfd36dfbcab" for the resource named "Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
     And I autogenerate the on-demand resources for the location "Mount doom orchestrator"/"Thark location"
     And I create a resource of type "alien.nodes.openstack.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the complex property "floatingip" to """{floating_network_name: net-pub}""" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the complex property "server" to """{security_groups: [openbar]}""" for the resource named "Small_Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "floatingip" to """{"floating_network_name": "net-pub"}""" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "server" to """{"security_groups": ["openbar"]}""" for the resource named "Small_Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
 
     And I create a new application with name "load-balancer-cfy3" and description "Apache load balancer with CFY 3" based on the template with name "apache-load-balancer"
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
