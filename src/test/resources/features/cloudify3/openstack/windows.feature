@@ -24,16 +24,19 @@ Feature: Windows with cloudify 3
     And I update cloudify 3 manager's url to the OpenStack's jenkins management server for orchestrator with name "Mount doom orchestrator"
     And I enable the orchestrator "Mount doom orchestrator"
     And I create a location named "Thark location" and infrastructure type "openstack" to the orchestrator "Mount doom orchestrator"
+
     And I create a resource of type "alien.nodes.openstack.WindowsCompute" named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "image" to "53e6ef20-a087-44d1-9bdb-5c7f4bffad5b" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "flavor" to "3" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "key_pair" to "khang_keypair" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "server" to """{"security_groups": ["openbar"]}""" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
+
     And I create a resource of type "alien.nodes.openstack.PrivateNetwork" named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "cidr" to "192.168.1.0/24" for the resource named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "gateway_ip" to "192.168.1.1" for the resource named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
+
     And I create a resource of type "alien.nodes.openstack.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the complex property "floatingip" to """{"floating_network_name": "net-pub"}""" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the complex property "server" to """{"security_groups": ["openbar"]}""" for the resource named "Medium_Windows" related to the location "Mount doom orchestrator"/"Thark location"
 
     And I create a new application with name "windows" and description "Windows with CFY 3" based on the template with name "windows"
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
