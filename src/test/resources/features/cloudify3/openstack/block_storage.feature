@@ -40,6 +40,10 @@ Feature: Block storage
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS1" for "block-storage-cfy3"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS2" for "block-storage-cfy3"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS3" for "block-storage-cfy3"
+    Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS4" for "block-storage-cfy3"
 
     When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs1/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
     When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs2/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
