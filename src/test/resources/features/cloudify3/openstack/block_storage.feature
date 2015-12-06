@@ -14,8 +14,8 @@ Feature: Block storage
     And I upload the local archive "topologies/block_storage.yaml"
 
     # Cloudify 3
-    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
-#    And I upload a plugin from "../alien4cloud-cloudify3-provider"
+#    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+    And I upload a plugin from "../alien4cloud-cloudify3-provider"
 
     # Orchestrator and location
     And I create an orchestrator named "Mount doom orchestrator" and plugin id "alien-cloudify-3-orchestrator:1.1.0-SM8-SNAPSHOT" and bean name "cloudify-orchestrator"
@@ -36,8 +36,6 @@ Feature: Block storage
 
     And I create a new application with name "block-storage-cfy3" and description "Block Storage with CFY 3" based on the template with name "block_storage"
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
-    And I add a node template "internet" related to the "tosca.nodes.Network:1.0.0.wd03-SNAPSHOT" node type
-    And I add a relationship of type "tosca.relationships.Network" defined in archive "tosca-normative-types" version "1.0.0.wd03-SNAPSHOT" with source "Compute" and target "internet" for requirement "network" of type "tosca.capabilities.Connectivity" and target capability "connection"
 
     When I deploy it
     Then I should receive a RestResponse with no error
