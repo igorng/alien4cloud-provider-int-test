@@ -28,7 +28,7 @@ Feature: Windows with cloudify 3
     And I create a resource of type "alien.nodes.openstack.WindowsCompute" named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "image" to "53e6ef20-a087-44d1-9bdb-5c7f4bffad5b" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "flavor" to "3" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the property "key_pair" to "khang_keypair" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the property "key_pair" to "a4c-manager" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the complex property "server" to """{"security_groups": ["openbar"]}""" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
 
     And I create a resource of type "alien.nodes.openstack.PrivateNetwork" named "PrivateNetwork" related to the location "Mount doom orchestrator"/"Thark location"
