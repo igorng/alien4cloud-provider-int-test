@@ -37,13 +37,13 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
-    And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
+#    And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
 
     # Scale
     When I scale up the node "Compute" by adding 1 instance(s)
     Then I should receive a RestResponse with no error
     And The node "Compute" should contain 2 instance(s) after at maximum 15 minutes
-    And I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
+#    And I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
 
     # upload data
     When I upload the local file "data/block_storage_test_file.txt" to the node "Compute" instance 0 remote path "/mnt/test/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
