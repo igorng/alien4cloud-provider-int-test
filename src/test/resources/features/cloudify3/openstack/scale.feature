@@ -17,7 +17,7 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     And I create an orchestrator named "Mount doom orchestrator" and plugin id "alien-cloudify-3-orchestrator:1.1.0-SM8-SNAPSHOT" and bean name "cloudify-orchestrator"
     And I get configuration for orchestrator "Mount doom orchestrator"
     And I update cloudify 3 manager's url to the OpenStack's jenkins management server for orchestrator with name "Mount doom orchestrator"
-    And I update openstack location import param for orchestrator with name "Mount doom orchestrator" using "http://www.getcloudify.org/spec/cloudify/3.3rc1/types.yaml,openstack-plugin.yaml"
+    And I update openstack location import param for orchestrator with name "Mount doom orchestrator" using "http://www.getcloudify.org/spec/cloudify/3.3rc1/types.yaml,openstack-plugin.yaml,http://www.getcloudify.org/spec/diamond-plugin/1.3rc1/plugin.yaml"
     And I enable the orchestrator "Mount doom orchestrator"
     And I create a location named "Thark location" and infrastructure type "openstack" to the orchestrator "Mount doom orchestrator"
     And I create a resource of type "alien.nodes.openstack.Flavor" named "Small" related to the location "Mount doom orchestrator"/"Thark location"
