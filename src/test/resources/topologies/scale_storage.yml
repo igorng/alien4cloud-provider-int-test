@@ -1,0 +1,61 @@
+tosca_definitions_version: tosca_simple_yaml_1_0_0_wd03
+description: Compute + storage + network
+template_name: scale_storage
+template_version: 0.1.0-SNAPSHOT
+template_author: admin
+
+imports:
+  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
+  - alien-extended-storage-types:1.1.0-SNAPSHOT  
+
+topology_template:
+  node_templates:
+    BlockStorage:
+      type: tosca.nodes.BlockStorage
+      requirements:
+        - attachment:
+            node: Compute
+            capability: tosca.capabilities.Attachment
+            relationship: tosca.relationships.AttachTo
+    Compute:
+      type: tosca.nodes.Compute
+      requirements:
+        - network:
+            node: Network
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network
+      capabilities:
+        endpoint:
+          properties:
+            protocol: tcp
+            initiator: source
+            network_name: PRIVATE
+            secure: true
+        os:
+          properties:
+            type: linux            
+        scalable:
+          properties:
+            min_instances: 1
+            max_instances: 2
+            default_instances: 1
+    Network:
+      type: tosca.nodes.Network
+      properties:
+        ip_version: 4
+    LinuxFileSystem:
+      type: alien.nodes.LinuxFileSystem
+      properties:
+        fs_type: ext4
+        location: /mnt/test
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: BlockStorage
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
