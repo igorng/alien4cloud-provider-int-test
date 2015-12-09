@@ -1,4 +1,5 @@
 Feature: Test scaling with linux compute + public network + volume with cloudify 3
+
   Scenario: Scale with volumes
     Given I am authenticated with "ADMIN" role
 
@@ -28,7 +29,7 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     And I create a resource of type "alien.nodes.openstack.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the complex property "floatingip" to """{"floating_network_name": "net-pub"}""" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the complex property "server" to """{"security_groups": ["openbar"]}""" for the resource named "Small_Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
-    And I create a resource of type "alien.cloudify.openstack.nodes.DeletableVolume" named "SmallBlock" related to the location "Mount doom orchestrator"/"Thark location"
+    And I create a resource of type "alien.cloudify.openstack.nodes.Volume" named "SmallBlock" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "size" to "1 gib" for the resource named "SmallBlock" related to the location "Mount doom orchestrator"/"Thark location"
 
     # Application
@@ -37,28 +38,28 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
-#    And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
+    And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
 
     # Scale
     When I scale up the node "Compute" by adding 1 instance(s)
     Then I should receive a RestResponse with no error
     And The node "Compute" should contain 2 instance(s) after at maximum 15 minutes
-#    And I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
+    And I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
 
     # upload data
     When I upload the local file "data/block_storage_test_file.txt" to the node "Compute" instance 0 remote path "/mnt/test/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
     When I upload the local file "data/block_storage_test_file.txt" to the node "Compute" instance 1 remote path "/mnt/test/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
     When I undeploy it
     Then I should receive a RestResponse with no error
-# FIXME Reuse of block storage is not working
-#    # change default instances and redeploy
-#    Given I update the node template "Compute"'s capability "scalable" of type "tosca.capabilities.Scalable"'s property "default_instances" to "2"
-#    When I deploy it
-#    Then I should receive a RestResponse with no error
-#    And The application's deployment must succeed after 15 minutes
-#
-#    # check that the volumes have been reused
-#    When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 0 with the keypair "keys/cfy3.pem" and user "ubuntu"
-#    Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
-#    When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 1 with the keypair "keys/cfy3.pem" and user "ubuntu"
-#    Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
+    # change default instances and redeploy
+    Given I update the node template "Compute"'s capability "scalable" of type "tosca.capabilities.Scalable"'s property "default_instances" to "2"
+    When I deploy it
+    Then I should receive a RestResponse with no error
+    And The application's deployment must succeed after 15 minutes
+
+    # check that the volumes have been reused
+    When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 0 with the keypair "keys/cfy3.pem" and user "ubuntu"
+    Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
+    When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 1 with the keypair "keys/cfy3.pem" and user "ubuntu"
+    Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
+    # FIXME This test do not delete volume at the end and so there's a leak
