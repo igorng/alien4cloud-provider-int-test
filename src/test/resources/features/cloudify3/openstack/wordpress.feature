@@ -24,7 +24,7 @@ Feature: Deploy wordpress with cloudify 3
 #    And I upload a plugin from "../alien4cloud-cloudify3-provider"
 
     # Orchestrator and location
-    And I create an orchestrator named "Mount doom orchestrator" and plugin id "alien-cloudify-3-orchestrator:1.1.0-SM8-SNAPSHOT" and bean name "cloudify-orchestrator"
+    And I create an orchestrator named "Mount doom orchestrator" and plugin name "alien-cloudify-3-orchestrator" and bean name "cloudify-orchestrator"
     And I get configuration for orchestrator "Mount doom orchestrator"
     And I update cloudify 3 manager's url to the OpenStack's jenkins management server for orchestrator with name "Mount doom orchestrator"
     And I enable the orchestrator "Mount doom orchestrator"
