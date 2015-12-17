@@ -45,21 +45,21 @@ Feature: Block storage
     Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS3" for "block-storage-cfy3"
     Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS4" for "block-storage-cfy3"
 
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs1/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs2/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs3/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs4/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs1/block_storage_test_file.txt" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs2/block_storage_test_file.txt" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs3/block_storage_test_file.txt" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute"'s remote path "/var/cbs4/block_storage_test_file.txt" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
 
     And I re-deploy the application
     Then The application's deployment must succeed after 15 minutes
 
-    When I download the remote file "/var/cbs1/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/var/cbs1/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
-    When I download the remote file "/var/cbs2/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/var/cbs2/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
-    When I download the remote file "/var/cbs3/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/var/cbs3/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
-    When I download the remote file "/var/cbs4/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/var/cbs4/block_storage_test_file.txt" from the node "Compute" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
     When I undeploy it
     Then I should have a volume on OpenStack with id defined in property "volume_id" of the node "CBS1" for "block-storage-cfy3"

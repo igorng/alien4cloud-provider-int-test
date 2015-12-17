@@ -47,8 +47,8 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     And I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
 
     # upload data
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute" instance 0 remote path "/mnt/test/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
-    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute" instance 1 remote path "/mnt/test/block_storage_test_file.txt" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute" instance 0 remote path "/mnt/test/block_storage_test_file.txt" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
+    When I upload the local file "data/block_storage_test_file.txt" to the node "Compute" instance 1 remote path "/mnt/test/block_storage_test_file.txt" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     When I undeploy it
     Then I should receive a RestResponse with no error
     # change default instances and redeploy
@@ -58,8 +58,8 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     And The application's deployment must succeed after 15 minutes
 
     # check that the volumes have been reused
-    When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 0 with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 0 with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
-    When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 1 with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 1 with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
     # FIXME This test do not delete volume at the end and so there's a leak

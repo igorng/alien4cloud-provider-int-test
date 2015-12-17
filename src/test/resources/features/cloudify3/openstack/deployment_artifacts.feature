@@ -38,7 +38,7 @@ Feature: Usage of deployment artifacts with cloudify 3
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
-    When I download the remote file "/home/ubuntu/toBeOverridden.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/home/ubuntu/toBeOverridden.txt" from the node "Compute" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/toOverride.txt"
-    When I download the remote file "/home/ubuntu/toBePreserved.txt" from the node "Compute" with the keypair "keys/cfy3.pem" and user "ubuntu"
+    When I download the remote file "/home/ubuntu/toBePreserved.txt" from the node "Compute" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "csars/artifact-test/toBePreserved.txt"
