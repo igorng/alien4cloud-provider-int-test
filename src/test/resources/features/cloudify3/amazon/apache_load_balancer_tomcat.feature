@@ -22,8 +22,8 @@ Feature: Apache load balancer + tomcat
     And I upload the git archive "samples/topology-load-balancer-tomcat"
 
     # Cloudify 3
-#    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
-    And I upload a plugin from "../alien4cloud-cloudify3-provider"
+    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+#    And I upload a plugin from "../alien4cloud-cloudify3-provider"
 
     # Orchestrator and location
     And I create an orchestrator named "Mount doom orchestrator" and plugin name "alien-cloudify-3-orchestrator" and bean name "cloudify-orchestrator"
