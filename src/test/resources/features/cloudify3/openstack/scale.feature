@@ -62,4 +62,6 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
     When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 1 with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
+    When I undeploy it
+    Then I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
     And I delete volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
