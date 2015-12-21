@@ -47,4 +47,5 @@ Feature: Monitoring and Auto healing
     And I wait for 120 seconds before continuing the test
     Then The node "Compute" should contain 1 instance(s) not started
     And all nodes instances must be in "started" state after 15 minutes
+    And I wait for 5 seconds before continuing the test
     
