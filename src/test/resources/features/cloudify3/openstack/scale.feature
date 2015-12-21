@@ -33,18 +33,18 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     And I update the property "size" to "1 gib" for the resource named "SmallBlock" related to the location "Mount doom orchestrator"/"Thark location"
 
     # Application
-    And I create a new application with name "scale_with_storage2" and description "Scale with storage" based on the template with name "scale_storage"
+    And I create a new application with name "scale_with_storage" and description "Scale with storage" based on the template with name "scale_storage"
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
-    And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
+    And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
 
     # Scale
     When I scale up the node "Compute" by adding 1 instance(s)
     Then I should receive a RestResponse with no error
     And The node "Compute" should contain 2 instance(s) after at maximum 15 minutes
-    And I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage2"
+    And I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
 
     # upload data
     When I upload the local file "data/block_storage_test_file.txt" to the node "Compute" instance 0 remote path "/mnt/test/block_storage_test_file.txt" with the keypair "keys/openstack/alien.pem" and user "ubuntu"
@@ -62,4 +62,4 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
     When I download the remote file "/mnt/test/block_storage_test_file.txt" from the node "Compute" instance 1 with the keypair "keys/openstack/alien.pem" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
-    # FIXME This test do not delete volume at the end and so there's a leak
+    And I delete volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
