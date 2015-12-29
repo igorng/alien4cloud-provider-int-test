@@ -24,7 +24,7 @@ Feature: Deploy wordpress with cloudify 3
     And I autogenerate the on-demand resources for the location "Mount doom orchestrator"/"Thark location"
 
     # Application CFY 3
-    And I create a new application with name "ioMan" and description "Yeo man!"
+    And I create a new application with name "longRunApp" and description "Yeo man!"
     And I add a node template "Compute" related to the "tosca.nodes.Compute:1.0.0.wd06-SNAPSHOT" node type
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
     When I deploy it
