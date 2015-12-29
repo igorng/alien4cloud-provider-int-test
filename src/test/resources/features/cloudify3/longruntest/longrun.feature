@@ -3,7 +3,7 @@ Feature: Deploy wordpress with cloudify 3
   #   - Network
   #   - Clean up block storage if deletable_blockstorage is set
   #   - Deployment of wordpress
-  Scenario: Wordpress
+  Scenario: Wordpress Long Run
     Given I am authenticated with "ADMIN" role
 
     # Archives
