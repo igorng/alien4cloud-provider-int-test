@@ -38,7 +38,7 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
-    And I wait for 5 seconds before continuing the test
+    And I wait for 30 seconds before continuing the test
     And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
 
     # Scale
