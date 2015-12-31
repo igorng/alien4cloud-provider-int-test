@@ -26,6 +26,7 @@ Feature: Windows with cloudify 3
     And I create a location named "Thark location" and infrastructure type "amazon" to the orchestrator "Mount doom orchestrator"
 
     And I create a resource of type "alien.cloudify.aws.nodes.WindowsCompute" named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the complex property "cloudify_agent" to """{"wait_started_timeout": "216000"}""" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "image_id" to "ami-4b80bf3c" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "instance_type" to "m3.medium" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "key_pair" to the environment variable "AWS_KEY_NAME" for the resource named "MediumWindows" related to the location "Mount doom orchestrator"/"Thark location"
