@@ -1,6 +1,6 @@
 Feature: Deploy wordpress with cloudify 3
   # Tested features with this scenario:
-  #   - Deployment of single compute
+  #   - Deployment/undeployment of single compute
   Scenario: Wordpress Long Run on Amazon
     Given I am authenticated with "ADMIN" role
     
@@ -15,7 +15,7 @@ Feature: Deploy wordpress with cloudify 3
     And I enable the orchestrator "Mount doom orchestrator"
     And I create a location named "Thark location" and infrastructure type "amazon" to the orchestrator "Mount doom orchestrator"
     And I create a resource of type "alien.cloudify.aws.nodes.InstanceType" named "Small" related to the location "Mount doom orchestrator"/"Thark location"
-    And I update the property "id" to "t2.small" for the resource named "Small" related to the location "Mount doom orchestrator"/"Thark location"
+    And I update the property "id" to "t2.nano" for the resource named "Small" related to the location "Mount doom orchestrator"/"Thark location"
     And I create a resource of type "alien.cloudify.aws.nodes.Image" named "Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
     And I update the property "id" to "ami-47a23a30" for the resource named "Ubuntu" related to the location "Mount doom orchestrator"/"Thark location"
     And I autogenerate the on-demand resources for the location "Mount doom orchestrator"/"Thark location"
