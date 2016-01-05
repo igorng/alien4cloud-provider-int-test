@@ -3,7 +3,7 @@ Feature: Deploy wordpress with cloudify 3
   #   - Network
   #   - Clean up block storage if deletable_blockstorage is set
   #   - Deployment of wordpress
-  Scenario: Wordpress Long Run
+  Scenario: Wordpress Long Run on OpenStack
     Given I am authenticated with "ADMIN" role
     
     And I checkout the git archive from url "https://github.com/alien4cloud/tosca-normative-types.git" branch "master"

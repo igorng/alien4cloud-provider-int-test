@@ -6,7 +6,7 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = { "classpath:features/cloudify3/longruntest" }, format = { "pretty", "html:target/cucumber/cloudify3/longruntest",
+@CucumberOptions(features = { "classpath:features/cloudify3/openstack_longruntest" }, format = { "pretty", "html:target/cucumber/cloudify3/longruntest",
         "json:target/cucumber/cloudify3/cucumber-longruntest.json" })
-public class RunCloudify3LongRunIT {
+public class RunCloudify3OpenStackLongRunIT {
 }
