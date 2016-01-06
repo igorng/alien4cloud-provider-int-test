@@ -1,9 +1,7 @@
 Feature: Deploy wordpress with cloudify 3
   # Tested features with this scenario:
-  #   - Network
-  #   - Clean up block storage if deletable_blockstorage is set
-  #   - Deployment of wordpress
-  Scenario: Wordpress Long Run on OpenStack
+  #   - Deployment of N computes
+  Scenario: Compute Long Run on Amazon
     Given I am authenticated with "ADMIN" role
 
     And I checkout the git archive from url "https://github.com/alien4cloud/tosca-normative-types.git" branch "master"
@@ -26,4 +24,4 @@ Feature: Deploy wordpress with cloudify 3
     And I create a new topology template with name "topology_template" and description "My topology template description1" and node templates
         | Compute | tosca.nodes.Compute:1.0.0.wd06-SNAPSHOT |
         
-    When I create and deploy 10 applications using the topology template "topology_template" and location \"(.*?)\"/\"(.*?)\"
+    When I create and deploy 10 applications using the topology template "topology_template" and location "Mount doom orchestrator"/"Thark location"
