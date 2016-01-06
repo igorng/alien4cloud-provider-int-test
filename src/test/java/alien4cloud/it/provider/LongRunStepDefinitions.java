@@ -46,9 +46,9 @@ public class LongRunStepDefinitions {
         for (int i = 0; i < appCount; i++) {
             String appName = "MyApp-" + i;
             log.info("=============== creating app '" + appName + "'");
-            APPLICATION.I_create_a_new_application_with_name_and_description_based_on_the_template_with_name("MyApp-" + i++, "a description", templateName);
+            APPLICATION.I_create_a_new_application_with_name_and_description_based_on_the_template_with_name("MyApp-" + i, "a description", templateName);
             Application application = ApplicationStepDefinitions.CURRENT_APPLICATION;
-            apps.put(Integer.valueOf(i), application);
+            apps.put(i, application);
             DEPLOYMENT_TOPOLOGY.I_Set_a_unique_location_policy_to_for_all_nodes(orchestratorName, locationName);
             log.info("=============== deploying app '" + appName + "'");
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_deploy_it();
@@ -56,6 +56,7 @@ public class LongRunStepDefinitions {
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_must_succeed_after_minutes(15);
             log.info("=============== deployed app '" + appName + "'");
         }
+        log.info("=============== Now we will undeploy all computes...");
         for (Application app : apps.values()) {
             ApplicationStepDefinitions.CURRENT_APPLICATION = app;
             log.info("=============== undeploying app '" + app.getName() + "'");
