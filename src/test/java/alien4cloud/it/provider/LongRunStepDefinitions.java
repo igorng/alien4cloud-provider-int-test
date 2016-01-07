@@ -31,7 +31,7 @@ public class LongRunStepDefinitions {
             log.info("=============== Starting deployment #" + ++deployementCount);
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_deploy_it();
             COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_must_succeed_after_minutes(15);
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_should_succeed_after_minutes(15);
             log.info("=============== Ending deployment #" + deployementCount);
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it();
             COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
@@ -53,7 +53,7 @@ public class LongRunStepDefinitions {
             log.info("=============== deploying app '" + appName + "'");
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_deploy_it();
             COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_must_succeed_after_minutes(15);
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_should_succeed_after_minutes(15);
             log.info("=============== deployed app '" + appName + "'");
         }
         log.info("=============== Now we will undeploy all computes...");
