@@ -39,6 +39,25 @@ public class LongRunStepDefinitions {
         }
     }
 
+    @When("^I loop deploying/undeploying applications using the topology template \"(.*?)\" and location \"([^\"]*)\"/\"([^\"]*)\"$")
+    public void i_loop_deploying_undeploying_the_app(String templateName, String orchestratorName, String locationName) throws Throwable {
+        int deployementCount = 0;
+        while (true) {
+            String appName = "MyLongRunAppApp-" + deployementCount++;
+            log.info("=============== creating app '" + appName + "'");
+            APPLICATION.I_create_a_new_application_with_name_and_description_based_on_the_template_with_name(appName, "a description", templateName);
+            DEPLOYMENT_TOPOLOGY.I_Set_a_unique_location_policy_to_for_all_nodes(orchestratorName, locationName);
+            log.info("=============== deploying app '" + appName + "'");
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_deploy_it();
+            COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_should_succeed_after_minutes(15);
+            log.info("=============== undeploying app '" + appName + "'");
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it();
+            COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
+            log.info("=============== undeployed app '" + appName + "'");
+        }
+    }
+
     @When("^I create and deploy (\\d+) applications using the topology template \"(.*?)\" and location \"([^\"]*)\"/\"([^\"]*)\"$")
     public void i_create_and_deploy_applications_using_the_topology_template_version(int appCount, String templateName, String orchestratorName,
             String locationName) throws Throwable {

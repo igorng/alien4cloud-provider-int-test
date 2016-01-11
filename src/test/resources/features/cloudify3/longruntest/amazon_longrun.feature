@@ -21,10 +21,9 @@ Feature: Deploy wordpress with cloudify 3
     And I autogenerate the on-demand resources for the location "Mount doom orchestrator"/"Thark location"
 
     # Application CFY 3
-    And I create a new application with name "longRunTestApp" and description "Yeo man!"
-    And I add a node template "Compute" related to the "tosca.nodes.Compute:1.0.0.wd06-SNAPSHOT" node type
-    And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
-    When I loop deploying/undeploying the app
+    And I create a new topology template with name "topology_template" and description "My topology template description1" and node templates
+        | Compute | tosca.nodes.Compute:1.0.0.wd06-SNAPSHOT |    
+    When I loop deploying/undeploying applications using the topology template "topology_template" and location "Mount doom orchestrator"/"Thark location"
     #When I deploy it
     #Then I should receive a RestResponse with no error
     #And The application's deployment must succeed after 15 minutes
