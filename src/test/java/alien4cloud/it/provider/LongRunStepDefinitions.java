@@ -24,37 +24,21 @@ public class LongRunStepDefinitions {
 
     private static final ApplicationStepDefinitions APPLICATION = new ApplicationStepDefinitions();
 
-    @When("^I loop deploying/undeploying the app$")
-    public void i_loop_deploying_undeploying_the_app() throws Throwable {
-        int deployementCount = 0;
-        while (true) {
-            log.info("=============== Starting deployment #" + ++deployementCount);
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_deploy_it();
-            COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_should_succeed_after_minutes(15);
-            log.info("=============== Ending deployment #" + deployementCount);
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it();
-            COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
-            log.info("=============== Ended deployment #" + deployementCount);
-        }
-    }
-
     @When("^I loop deploying/undeploying applications using the topology template \"(.*?)\" and location \"([^\"]*)\"/\"([^\"]*)\"$")
     public void i_loop_deploying_undeploying_the_app(String templateName, String orchestratorName, String locationName) throws Throwable {
         int deployementCount = 0;
         while (true) {
             String appName = "MyLongRunAppApp-" + deployementCount++;
-            log.info("=============== creating app '" + appName + "'");
+            log.info("Creating app '" + appName + "'");
             APPLICATION.I_create_a_new_application_with_name_and_description_based_on_the_template_with_name(appName, "a description", templateName);
             DEPLOYMENT_TOPOLOGY.I_Set_a_unique_location_policy_to_for_all_nodes(orchestratorName, locationName);
-            log.info("=============== deploying app '" + appName + "'");
+            log.info("Deploying app '" + appName + "'");
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_deploy_it();
             COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_should_succeed_after_minutes(15);
-            log.info("=============== undeploying app '" + appName + "'");
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it();
-            COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
-            log.info("=============== undeployed app '" + appName + "'");
+            log.info("Undeploying app '" + appName + "'");
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_failsafe_undeploy_it();
+            log.info("Undeployed app '" + appName + "'");
         }
     }
 
@@ -64,24 +48,23 @@ public class LongRunStepDefinitions {
         Map<Integer, Application> apps = Maps.newHashMap();
         for (int i = 0; i < appCount; i++) {
             String appName = "MyApp-" + i;
-            log.info("=============== creating app '" + appName + "'");
+            log.info("Creating app '" + appName + "'");
             APPLICATION.I_create_a_new_application_with_name_and_description_based_on_the_template_with_name("MyApp-" + i, "a description", templateName);
             Application application = ApplicationStepDefinitions.CURRENT_APPLICATION;
             apps.put(i, application);
             DEPLOYMENT_TOPOLOGY.I_Set_a_unique_location_policy_to_for_all_nodes(orchestratorName, locationName);
-            log.info("=============== deploying app '" + appName + "'");
+            log.info("Deploying app '" + appName + "'");
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_deploy_it();
             COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
             APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.The_application_s_deployment_should_succeed_after_minutes(15);
-            log.info("=============== deployed app '" + appName + "'");
+            log.info("Deployed app '" + appName + "'");
         }
-        log.info("=============== Now we will undeploy all computes...");
+        log.info("Now we will undeploy all computes...");
         for (Application app : apps.values()) {
             ApplicationStepDefinitions.CURRENT_APPLICATION = app;
-            log.info("=============== undeploying app '" + app.getName() + "'");
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it();
-            COMMON_STEP_DEFINITIONS.I_should_receive_a_RestResponse_with_no_error();
-            log.info("=============== undeployed app '" + app.getName() + "'");
+            log.info("Undeploying app '" + app.getName() + "'");
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_failsafe_undeploy_it();
+            log.info("Undeployed app '" + app.getName() + "'");
         }
     }
 
