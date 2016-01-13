@@ -1,4 +1,4 @@
-package alien4cloud.longrun;
+package alien4cloud.it;
 
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
