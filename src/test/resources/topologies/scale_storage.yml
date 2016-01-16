@@ -43,6 +43,10 @@ topology_template:
             node: Network
             capability: tosca.capabilities.Connectivity
             relationship: tosca.relationships.Network
+      capabilities:
+        os:
+          properties:
+            type: linux
 
     Compute:
       type: tosca.nodes.Compute
