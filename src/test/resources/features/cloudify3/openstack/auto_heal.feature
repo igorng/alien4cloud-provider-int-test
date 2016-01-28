@@ -36,6 +36,7 @@ Feature: Monitoring and Auto healing
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
     And I set the following inputs properties
       | monitoring_interval_inMinute | 1 |
+      | auto_heal | true |
 
     When I deploy it
     Then I should receive a RestResponse with no error
