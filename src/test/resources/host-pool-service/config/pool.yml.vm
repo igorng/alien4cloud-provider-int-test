@@ -1,0 +1,15 @@
+default:
+  port: $port
+  auth:
+    keyfile: config/keys/${keyFileName}.pem
+    username: $username
+#if($password)
+    password: $password
+#end
+hosts:
+#foreach($host in $hosts)
+  - host: ${host.ipAddress}
+#if(${host.publicAddress})
+    public_address: ${host.publicAddress}
+#end
+#end

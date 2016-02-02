@@ -1,26 +1,33 @@
 package alien4cloud.it.provider;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-
-import org.junit.Assert;
-
 import alien4cloud.it.Context;
 import alien4cloud.it.application.ApplicationStepDefinitions;
 import alien4cloud.it.application.deployment.ApplicationsDeploymentStepDefinitions;
 import alien4cloud.it.common.CommonStepDefinitions;
 import alien4cloud.it.orchestrators.OrchestratorsDefinitionsSteps;
+import alien4cloud.it.provider.ByonStepDefinitions.ComputeInstance;
+import alien4cloud.it.provider.ByonStepDefinitions.OpenstackComputeInstance;
+import alien4cloud.it.provider.util.OpenStackClient;
 import alien4cloud.it.setup.SetupStepDefinitions;
+import alien4cloud.model.application.Application;
 import alien4cloud.rest.utils.RestClient;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 
 @Slf4j
 public class Setup {
-    
+
     private static final SetupStepDefinitions SETUP_STEP_DEFINITIONS = new SetupStepDefinitions();
 
     private static final CommonStepDefinitions COMMON_STEP_DEFINITIONS = new CommonStepDefinitions();
@@ -28,6 +35,8 @@ public class Setup {
     private static final ApplicationsDeploymentStepDefinitions APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS = new ApplicationsDeploymentStepDefinitions();
 
     private static final OrchestratorsDefinitionsSteps ORCHESTRATORS_DEFINITIONS_STEPS = new OrchestratorsDefinitionsSteps();
+
+    private static final ByonStepDefinitions BYON_STEP_DEFINITIONS = new ByonStepDefinitions();
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -52,14 +61,37 @@ public class Setup {
 
     @After
     public void afterScenario() throws Throwable {
+        log.info("Clean up deployed applications");
+        if (MapUtils.isNotEmpty(ApplicationStepDefinitions.CURRENT_APPLICATIONS)) {
+            for (Application application : ApplicationStepDefinitions.CURRENT_APPLICATIONS.values()) {
+                APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it(application, true);
+            }
+            ApplicationStepDefinitions.CURRENT_APPLICATIONS.clear();
+        }
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
-            log.info("Clean up deployed application");
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it();
+            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it(ApplicationStepDefinitions.CURRENT_APPLICATION, true);
             ApplicationStepDefinitions.CURRENT_APPLICATION = null;
         }
+        cleanupCreatedResources();
         ORCHESTRATORS_DEFINITIONS_STEPS.I_disable_all_orchestrators();
     }
-    
+
+    private void cleanupCreatedResources() {
+        Map<String, ComputeInstance> createdCompute = ByonStepDefinitions.CREATED_COMPUTES;
+        OpenStackClient osClient = Context.getInstance().getOpenStackClient();
+        Iterator<Entry<String, ComputeInstance>> entryIterator = createdCompute.entrySet().iterator();
+        while (entryIterator.hasNext()) {
+            ComputeInstance instance = entryIterator.next().getValue();
+            if (instance instanceof OpenstackComputeInstance) {
+                osClient.deleteCompute(instance.getId());
+                if (StringUtils.isNotBlank(instance.getFloatingIpId())) {
+                    osClient.deleteFloatingIp(instance.getFloatingIpId());
+                }
+                entryIterator.remove();
+            }
+        }
+    }
+
     @And("^I upload a plugin from maven artifact \"([^\"]*)\"$")
     public void I_upload_a_plugin_from_maven_artifact(String artifact) throws Throwable {
         String[] artifactTokens = artifact.split(":");
