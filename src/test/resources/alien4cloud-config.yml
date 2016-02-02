@@ -121,5 +121,5 @@ openstack:
   region: RegionOne
   cfy3:
     manager_name: alien33GA-manager-server
-    manager_user:
-    manager_password:
+    manager_user: admin
+    manager_password: admin
