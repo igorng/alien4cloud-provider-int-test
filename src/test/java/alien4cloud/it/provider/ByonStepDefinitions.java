@@ -177,7 +177,7 @@ public class ByonStepDefinitions {
         // zip it
         Path configZipPath = Context.getInstance().getTmpDirectory().resolve("config.tar.gz");
         FileUtil.delete(configZipPath);
-        FileUtil.tar(configFolder, configZipPath, true, false);
+        FileUtil.tar(configFolder, configZipPath, true, true);
     }
 
     @When("^I save the attribute \"(.*?)\" of the node \"(.*?)\" as \"(.*?)\"$")

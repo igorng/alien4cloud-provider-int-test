@@ -1,7 +1,7 @@
 default:
   port: $port
   auth:
-    keyfile: config/keys/${keyFileName}.pem
+    keyfile: keys/${keyFileName}.pem
     username: $username
 #if($password)
     password: $password
