@@ -20,7 +20,7 @@ Feature: Monitoring and Auto healing
     # Orchestrator and location
     And I create an orchestrator named "Mount doom orchestrator" and plugin name "alien-cloudify-3-orchestrator" and bean name "cloudify-orchestrator"
     And I get configuration for orchestrator "Mount doom orchestrator"
-    And I update cloudify 3 manager's url to the OpenStack's jenkins management server for orchestrator with name "Mount doom orchestrator"
+    And I update cloudify 3 manager's url to value defined in environment variable "OPENSTACK_CLOUDIFY3_MANAGER_URL" for orchestrator with name "Mount doom orchestrator"
     And I enable the orchestrator "Mount doom orchestrator"
     And I create a location named "Thark location" and infrastructure type "openstack" to the orchestrator "Mount doom orchestrator"
     And I create a resource of type "alien.nodes.openstack.Flavor" named "Small" related to the location "Mount doom orchestrator"/"Thark location"
@@ -36,6 +36,7 @@ Feature: Monitoring and Auto healing
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
     And I set the following inputs properties
       | monitoring_interval_inMinute | 1 |
+      | auto_heal | true |
 
     When I deploy it
     Then I should receive a RestResponse with no error
