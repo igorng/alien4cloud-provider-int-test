@@ -46,24 +46,6 @@ public class StringMatcherStepDefinitions {
         return stringToExpand;
     }
 
-    @Then("^the registered string \"([^\"]*)\" lines should match the following regexps$")
-    public void the_registered_string_should_match_the_following_regexps(String key, List<String> rows) throws Throwable {
-        String content = Context.getInstance().getRegisteredStringContent(key);
-        StringReader stringReader = new StringReader(content);
-        BufferedReader bufferedReader = new BufferedReader(stringReader);
-        for (String regexp : rows) {
-            String line = bufferedReader.readLine();
-            if (line == null) {
-                Assert.fail("no more line to read in the content");
-            }
-            Pattern pattern = Pattern.compile(regexp);
-            Matcher matcher = pattern.matcher(line);
-            if (!matcher.matches()) {
-                Assert.fail(String.format("The line <%s> does'nt matche the regexp <%s>", line, regexp));
-            }
-        }
-    }
-
     /**
      * Here we test that the regex sequence is respected : this means that the lines must match in the given order (even if we have other lines between them).
      */
@@ -105,7 +87,7 @@ public class StringMatcherStepDefinitions {
     @Then("^I can catch the following groups in one line of the registered string \"(.*?)\" and store them as registered strings$")
     public void i_can_catch_the_following_groups_in_one_line_of_the_registered_string_and_store_them_as_registered_strings(String key, List<String> rows)
             throws Throwable {
-        String regex = rows.get(0);
+        String regex = expandString(rows.get(0));
         Pattern pattern = Pattern.compile(regex);
         String content = Context.getInstance().getRegisteredStringContent(key);
         StringReader stringReader = new StringReader(content);
@@ -116,7 +98,7 @@ public class StringMatcherStepDefinitions {
             Matcher matcher = pattern.matcher(line);
             if (matcher.matches()) {
                 // ok the line matches the pattern
-                Assert.assertEquals("Not the same number of groups than exepected, please review test ...", rows.size() - 1, matcher.groupCount());
+                Assert.assertEquals("Not the same number of groups than expected, please review test ...", rows.size() - 1, matcher.groupCount());
                 for (int i = 1; i <= matcher.groupCount(); i++) {
                     String catchedValue = matcher.group(i);
                     String catchedKey = rows.get(i);
