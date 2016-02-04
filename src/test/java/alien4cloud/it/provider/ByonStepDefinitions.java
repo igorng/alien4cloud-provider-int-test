@@ -10,6 +10,8 @@ import alien4cloud.utils.FileUtil;
 import com.google.common.collect.Maps;
 import cucumber.api.java.en.When;
 import java.io.FileWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -97,7 +99,7 @@ public class ByonStepDefinitions {
         }
     }
 
-    private CreateServerOptions buildOptions(Map<String, String> optionsMap) {
+    private CreateServerOptions buildOptions(Map<String, String> optionsMap) throws URISyntaxException {
 
         CreateServerOptions options = new CreateServerOptions();
         options.keyPairName(MapUtils.getString(optionsMap, "keyPairName"));
@@ -119,8 +121,9 @@ public class ByonStepDefinitions {
             String[] splitted = networks.split(",");
             options.networks(splitted);
         } else {
-            String managerName = Context.getInstance().getAppProperty("openstack.cfy3.manager_name");
-            String managerNetworkName = osClient.getServerNetworksNames(managerName).iterator().next();
+            String managerIp = getHostFromUrl(System.getenv(Setup.OPENSTACK_URL_ENV_NAME));
+            Server managerServer = osClient.findServerByIp(managerIp);
+            String managerNetworkName = osClient.getServerNetworksNames(managerServer).iterator().next();
             Network network = osClient.findNetworkByName(managerNetworkName);
             Assert.assertNotNull("Cannot find the manager private network " + managerNetworkName, network);
             options.networks(network.getId());
@@ -133,6 +136,11 @@ public class ByonStepDefinitions {
         String value = MapUtils.getString(map, propertyName);
         Assert.assertNotNull(propertyName + " Should not be provided.", value);
         return value;
+    }
+
+    private String getHostFromUrl(String url) throws URISyntaxException {
+        URI uri = new URI(url);
+        return uri.getHost();
     }
 
     @When("^I generate an \"(.*?)\" pool configuration with the created instances$")

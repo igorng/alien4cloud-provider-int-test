@@ -28,6 +28,8 @@ import org.junit.Assert;
 @Slf4j
 public class Setup {
 
+    public static final String OPENSTACK_URL_ENV_NAME = "OPENSTACK_CLOUDIFY3_MANAGER_URL";
+
     private static final SetupStepDefinitions SETUP_STEP_DEFINITIONS = new SetupStepDefinitions();
 
     private static final CommonStepDefinitions COMMON_STEP_DEFINITIONS = new CommonStepDefinitions();
