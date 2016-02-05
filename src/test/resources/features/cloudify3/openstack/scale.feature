@@ -40,7 +40,6 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     And The application's deployment must succeed after 15 minutes
     And I wait for 30 seconds before continuing the test
     And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
-    And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage2" for "scale_with_storage"
     And I should have a volume on OpenStack with id defined in property "volume_id" of the node "BlockStorage3" for "scale_with_storage"
 
     # Scale
@@ -68,8 +67,6 @@ Feature: Test scaling with linux compute + public network + volume with cloudify
     Then The downloaded file should have the same content as the local file "data/block_storage_test_file.txt"
     When I undeploy it
     Then I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
-    Then I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage2" for "scale_with_storage"
     Then I should have volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage3" for "scale_with_storage"
     And I delete volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage" for "scale_with_storage"
-    And I delete volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage2" for "scale_with_storage"
     And I delete volumes on OpenStack with ids defined in property "volume_id" of the node "BlockStorage3" for "scale_with_storage"

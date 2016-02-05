@@ -20,14 +20,6 @@ topology_template:
             capability: tosca.capabilities.Attachment
             relationship: tosca.relationships.AttachTo
 
-    BlockStorage2:
-      type: tosca.nodes.BlockStorage
-      requirements:
-        - attachment:
-            node: AnotherScaleCompute
-            capability: tosca.capabilities.Attachment
-            relationship: tosca.relationships.AttachTo
-
     BlockStorage3:
       type: tosca.nodes.BlockStorage
       requirements:
@@ -65,23 +57,6 @@ topology_template:
             max_instances: 2
             default_instances: 1
 
-    AnotherScaleCompute:
-      type: tosca.nodes.Compute
-      requirements:
-        - network:
-            node: Network
-            capability: tosca.capabilities.Connectivity
-            relationship: tosca.relationships.Network
-      capabilities:
-        os:
-          properties:
-            type: linux
-        scalable:
-          properties:
-            min_instances: 1
-            max_instances: 2
-            default_instances: 1
-
     Network:
       type: tosca.nodes.Network
       properties:
@@ -99,23 +74,6 @@ topology_template:
             relationship: tosca.relationships.HostedOn
         - partition:
             node: BlockStorage
-            capability: tosca.capabilities.Node
-            relationship: alien.relationships.LinuxPartition
-            properties:
-              partition_type: 83
-
-    LinuxFileSystem2:
-      type: alien.nodes.LinuxFileSystem
-      properties:
-        fs_type: ext4
-        location: /mnt/test
-      requirements:
-        - host:
-            node: AnotherScaleCompute
-            capability: tosca.capabilities.Container
-            relationship: tosca.relationships.HostedOn
-        - partition:
-            node: BlockStorage2
             capability: tosca.capabilities.Node
             relationship: alien.relationships.LinuxPartition
             properties:
