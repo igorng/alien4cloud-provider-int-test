@@ -1,0 +1,34 @@
+tosca_definitions_version: tosca_simple_yaml_1_0_0_wd03
+
+template_name: artifact-test-types
+template_author: Alien4cloud
+template_version: 1.0.0-SNAPSHOT
+
+imports:
+  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
+
+description: Tomcat recipe, including war type and relationship.
+
+node_types:
+  alien.nodes.Artifacts:
+    derived_from: tosca.nodes.SoftwareComponent
+    artifacts:
+      - confs_directory: conf
+        type: tosca.artifacts.File
+      - to_be_overridden: toBeOverridden.txt
+        type: tosca.artifacts.File
+      - to_be_preserved: toBePreserved.txt
+        type: tosca.artifacts.File
+    interfaces:
+      Standard:
+        create: scripts/assertArtifactsCopiedForNode.sh
+
+relationship_types:
+  alien.relationships.ArtifactsHostedOnCompute:
+    derived_from: tosca.relationships.HostedOn
+    artifacts:
+      - properties_file: conf/settings.properties
+        type: tosca.artifacts.File
+    interfaces:
+      configure:
+        post_configure_target: scripts/assertArtifactsCopiedForRelationship.sh

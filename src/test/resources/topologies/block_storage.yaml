@@ -1,0 +1,130 @@
+tosca_definitions_version: tosca_simple_yaml_1_0_0_wd03
+description: Alien4Cloud generated service template
+template_name: block_storage
+template_version: 0.1.0-SNAPSHOT
+template_author: admin
+
+imports:
+  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
+  - alien-extended-storage-types:1.1.0-SNAPSHOT
+
+topology_template:
+  node_templates:
+    Compute:
+      type: tosca.nodes.Compute
+      requirements:
+        - network:
+            node: PublicNetwork
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network
+      capabilities:
+        endpoint:
+          properties:
+            protocol: tcp
+            initiator: source
+            network_name: PRIVATE
+            secure: true
+        os:
+          properties:
+            type: linux
+        scalable:
+          properties:
+            min_instances: 1
+            max_instances: 1
+            default_instances: 1
+    PublicNetwork:
+      type: tosca.nodes.Network
+      properties:
+        ip_version: 4
+    CBS1:
+      type: tosca.nodes.BlockStorage
+      requirements:
+        - attachment:
+            node: Compute
+            capability: tosca.capabilities.Attachment
+            relationship: tosca.relationships.AttachTo
+    CBS2:
+      type: tosca.nodes.BlockStorage
+      requirements:
+        - attachment:
+            node: Compute
+            capability: tosca.capabilities.Attachment
+            relationship: tosca.relationships.AttachTo
+    CBS3:
+      type: tosca.nodes.BlockStorage
+      requirements:
+        - attachment:
+            node: Compute
+            capability: tosca.capabilities.Attachment
+            relationship: tosca.relationships.AttachTo
+    CBS4:
+      type: tosca.nodes.BlockStorage
+      requirements:
+        - attachment:
+            node: Compute
+            capability: tosca.capabilities.Attachment
+            relationship: tosca.relationships.AttachTo
+    LinuxFileSystem-1:
+      type: alien.nodes.LinuxFileSystem
+      properties:
+        fs_type: ext4
+        location: /var/cbs1
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: CBS1
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
+    LinuxFileSystem-2:
+      type: alien.nodes.LinuxFileSystem
+      properties:
+        fs_type: ext4
+        location: /var/cbs2
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: CBS2
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
+    LinuxFileSystem-3:
+      type: alien.nodes.LinuxFileSystem
+      properties:
+        fs_type: ext4
+        location: /var/cbs3
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: CBS3
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
+    LinuxFileSystem-4:
+      type: alien.nodes.LinuxFileSystem
+      properties:
+        fs_type: ext4
+        location: /var/cbs4
+      requirements:
+        - host:
+            node: Compute
+            capability: tosca.capabilities.Container
+            relationship: tosca.relationships.HostedOn
+        - partition:
+            node: CBS4
+            capability: tosca.capabilities.Node
+            relationship: alien.relationships.LinuxPartition
+            properties:
+              partition_type: 83
