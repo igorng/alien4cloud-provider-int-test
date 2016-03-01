@@ -8,7 +8,8 @@ Feature: Deploy wordpress with cloudify 3
 
     And I checkout the git archive from url "https://github.com/alien4cloud/tosca-normative-types.git" branch "master"
     And I upload the git archive "tosca-normative-types"
-    And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+    #And I upload a plugin from maven artifact "alien4cloud:alien4cloud-cloudify3-provider"
+    And I upload a plugin from "../alien4cloud-cloudify3-provider"
 
     # Orchestrator and location
     And I create an orchestrator named "Mount doom orchestrator" and plugin name "alien-cloudify-3-orchestrator" and bean name "cloudify-orchestrator"
@@ -26,7 +27,7 @@ Feature: Deploy wordpress with cloudify 3
 
     # Application CFY 3
     And I create a new application with name "longRunTestApp" and description "Yeo man!"
-    And I add a node template "Compute" related to the "tosca.nodes.Compute:1.0.0.wd06-SNAPSHOT" node type
+    And I add a node template "Compute" related to the "tosca.nodes.Compute:1.0.0-SNAPSHOT" node type
     And I Set a unique location policy to "Mount doom orchestrator"/"Thark location" for all nodes
     When I loop deploying/undeploying the app
     #When I deploy it

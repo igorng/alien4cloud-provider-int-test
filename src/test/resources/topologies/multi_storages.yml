@@ -5,7 +5,7 @@ template_version: 0.1.0-SNAPSHOT
 template_author: admin
 
 imports:
-  - tosca-normative-types:1.0.0.wd06-SNAPSHOT
+  - tosca-normative-types:1.0.0-ALIEN11
   - alien-extended-storage-types:1.1.0-SNAPSHOT
   - test-int-types:1.0-SNAPSHOT
 
