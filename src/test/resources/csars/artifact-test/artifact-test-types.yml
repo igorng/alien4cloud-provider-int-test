@@ -9,9 +9,27 @@ imports:
 
 description: Tomcat recipe, including war type and relationship.
 
+data_types:
+
+  alien.nodes.test.ComplexDataType:
+    properties:
+      nested:
+        type: string
+      nested_array:
+        type: list
+        entry_schema:
+          type: string
+      nested_map:
+        type: map
+        entry_schema:
+          type: string
+
 node_types:
   alien.nodes.Artifacts:
     derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      complex_prop:
+        type: alien.nodes.test.ComplexDataType
     artifacts:
       - confs_directory: conf
         type: tosca.artifacts.File
@@ -21,7 +39,13 @@ node_types:
         type: tosca.artifacts.File
     interfaces:
       Standard:
-        create: scripts/assertArtifactsCopiedForNode.sh
+        create:
+          inputs:
+            COMPLEX: { get_property: [ SELF, "complex_prop" ] }
+            NESTED: { get_property: [ SELF, "complex_prop.nested" ] }
+            NESTED_ARRAY_ELEMENT: { get_property: [ SELF, "complex_prop.nested_array[0]" ] }
+            NESTED_MAP_ELEMENT: { get_property: [ SELF, "complex_prop.nested_map.tutu" ] }
+          implementation: scripts/assertArtifactsCopiedForNode.sh
 
 relationship_types:
   alien.relationships.ArtifactsHostedOnCompute:

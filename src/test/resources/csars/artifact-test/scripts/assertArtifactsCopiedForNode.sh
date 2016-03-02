@@ -41,3 +41,27 @@ if [ -z "$to_be_preserved" ]; then
 fi
 echo "to_be_preserved is set to $to_be_preserved"
 cp $to_be_preserved ~/
+
+if [ -z "$COMPLEX" ]; then
+    echo "COMPLEX is not set, test failed"
+    exit 1
+fi
+echo "COMPLEX is set to $COMPLEX"
+
+if [ -z "$NESTED" ]; then
+    echo "NESTED is not set, test failed"
+    exit 1
+fi
+echo "NESTED is set to $NESTED"
+
+if [ -z "$NESTED_ARRAY_ELEMENT" ]; then
+    echo "NESTED_ARRAY_ELEMENT is not set, test failed"
+    exit 1
+fi
+echo "NESTED_ARRAY_ELEMENT is set to $NESTED_ARRAY_ELEMENT"
+
+if [ -z "$NESTED_MAP_ELEMENT" ]; then
+    echo "NESTED_MAP_ELEMENT is not set, test failed"
+    exit 1
+fi
+echo "NESTED_MAP_ELEMENT is set to $NESTED_MAP_ELEMENT"

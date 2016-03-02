@@ -12,6 +12,13 @@ topology_template:
   node_templates:
     Artifacts:
       type: alien.nodes.Artifacts
+      properties:
+        complex_prop:
+          nested: toto
+          nested_array: [ titi, tuctuc ]
+          nested_map:
+            toctoc: tactac
+            tutu: tata
       requirements:
         - host:
             node: Compute
