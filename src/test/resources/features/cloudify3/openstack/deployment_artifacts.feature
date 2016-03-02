@@ -2,6 +2,7 @@ Feature: Usage of deployment artifacts with cloudify 3
   # Tested features with this scenario:
   #   - Deployment artifact as a file and directory for nodes and relationships
   #   - Override deployment artifact in Alien
+  #   - Complex property usage with get_property
   Scenario: Usage of deployment artifacts with cloudify 3
     Given I am authenticated with "ADMIN" role
 

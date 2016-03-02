@@ -5,7 +5,7 @@ template_version: 0.1.0-SNAPSHOT
 template_author: alien
 
 imports:
-  - tosca-normative-types:1.0.0-ALIEN11
+  - tosca-normative-types:1.0.0-SNAPSHOT
   - apache-type:2.0.0-SNAPSHOT
 
 topology_template:
