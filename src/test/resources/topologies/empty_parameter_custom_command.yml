@@ -1,0 +1,30 @@
+tosca_definitions_version: tosca_simple_yaml_1_0_0_wd03
+description: Component reproducing bug
+template_name: ALIEN-1190-template
+template_version: 0.1-SNAPSHOT
+template_author: Support Alien
+
+imports:
+  - "tosca-normative-types:1.0.0.wd06-SNAPSHOT"
+  - "ALIEN-1190-test:0.1-SNAPSHOT"
+
+topology_template:
+  node_templates:
+    customComp:
+      type: alien.support.customComp
+      properties:
+        name: mycomp
+      requirements:
+        - host: Compute
+
+    Network:
+      type: tosca.nodes.Network
+      properties:
+        ip_version: 4
+    Compute:
+      type: tosca.nodes.Compute
+      requirements:
+        - network:
+            node: Network
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network

@@ -66,12 +66,12 @@ public class Setup {
         log.info("Clean up deployed applications");
         if (MapUtils.isNotEmpty(ApplicationStepDefinitions.CURRENT_APPLICATIONS)) {
             for (Application application : ApplicationStepDefinitions.CURRENT_APPLICATIONS.values()) {
-                APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it(application, true);
+                // APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it(application, true);
             }
             ApplicationStepDefinitions.CURRENT_APPLICATIONS.clear();
         }
         if (ApplicationStepDefinitions.CURRENT_APPLICATION != null) {
-            APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it(ApplicationStepDefinitions.CURRENT_APPLICATION, true);
+            // APPLICATIONS_DEPLOYMENT_STEP_DEFINITIONS.I_undeploy_it(ApplicationStepDefinitions.CURRENT_APPLICATION, true);
             ApplicationStepDefinitions.CURRENT_APPLICATION = null;
         }
         cleanupCreatedResources();

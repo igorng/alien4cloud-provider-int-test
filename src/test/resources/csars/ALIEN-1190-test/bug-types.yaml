@@ -1,0 +1,32 @@
+tosca_definitions_version: tosca_simple_yaml_1_0_0_wd03
+description: Component reproducing bug
+template_name: ALIEN-1190-test
+template_version: 0.1-SNAPSHOT
+template_author: Support Alien
+
+imports:
+  - "tosca-normative-types:1.0.0.wd06-SNAPSHOT"
+
+node_types:
+  alien.support.customComp:
+    derived_from: tosca.nodes.SoftwareComponent
+    description: >
+       Support-custom_comp
+    tags:
+      icon: /images/software.png
+    properties:
+      name:
+        type: string
+        required: true
+        default: mycomp
+        description: >
+          file name
+    interfaces:
+      custom:
+        update:
+          inputs:
+            name:
+              type: string
+              description: test name
+              required: false
+          implementation: scripts/myscript.sh
